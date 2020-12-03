@@ -9,6 +9,7 @@ const AgentModel = mongoose.model('Agent', new mongoose.Schema({
   rating: Number,
   sales: Number,
 }));
+
 const ScheduleModel = mongoose.model('Schedule', new mongoose.Schema({
   in_person: Boolean,
   date: String,
