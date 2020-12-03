@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
-const PriceModel = mongoose.model('Price', new mongoose.Schema({ id: Number, homePrice: Number }));
+const PriceModel = mongoose.model('Price', new mongoose.Schema({
+  id: Number,
+  homePrice: Number
+}));
 
 const AgentModel = mongoose.model('Agent', new mongoose.Schema({
   name: String,
