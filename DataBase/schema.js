@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 
-const PriceModel = mongoose.model('Price', new mongoose.Schema({ id: Number, homePrice: Number }));
+const HomePriceModel = mongoose.model('Price', new mongoose.Schema({ id: Number, homePrice: Number }));
 
-const AgentModel = mongoose.model('Agent', new mongoose.Schema({
+const MortgageAgentModel = mongoose.model('Agent', new mongoose.Schema({
   name: String,
   title: String,
-  phone: String,
   rating: Number,
-  sales: Number,
+  recentSales: Number,
+  phone: String,
+  avatar: String,   // s3 resource
+  about: String,    // a description
+  agency: String,   // employer
 }));
-const ScheduleModel = mongoose.model('Schedule', new mongoose.Schema({
+
+const MortgageAgentAppointmentModel = mongoose.model('Schedule', new mongoose.Schema({
   inPerson: Boolean,
   date: String,
   time: String,
@@ -19,6 +23,6 @@ const ScheduleModel = mongoose.model('Schedule', new mongoose.Schema({
   financing: Boolean,
 }));
 
-module.exports.Price = PriceModel;
-module.exports.Agent = AgentModel;
+module.exports.PropertyPrice = PropertyPriceModel;
+module.exports.MortgageAgentAppointment = MortgageAgentAppointmentModel;
 module.exports.Schedule = ScheduleModel;
