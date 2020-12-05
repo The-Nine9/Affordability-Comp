@@ -1,21 +1,56 @@
 const mongoose = require('mongoose');
 
 const Property = mongoose.model("Property", new mongoose.Schema({
-  "id": Number,
+  "property_id": Number,
   "price": Number,
-  "appointments": Array
+  "hoa": {
+    "name": String,
+    "fee": Number
+  },
+  "agents": [Number], // 2-way embeddeing, with ids as foreign keys
+  "appointments": [{
+    "appointment_id": Number,
+    "contactAgent": {
+      "nameAgent": String,
+      "phone": String,
+      "email": String
+    },
+    "contactClient": {
+      "client_id": Number,
+      "nameClient": String,
+      "phone": String,
+      "email": String
+    },
+    "date": Date,
+    "inPerson": Boolean,
+    "zoom":  String,
+  }]
 }));
 
 const Agent = mongoose.model("Agent", new mongoose.Schema({
+  "agent_id": Number,
   "name": String,
   "title": String,
   "rating": Number,
   "recentSales": Number,
   "phone": String,
-  "avatar": String,   // s3 resource
-  "about": String,    // a description
-  "agency": String,   // employer
-  "appointments": Array
+  "email": String,
+  "avatar": String,
+  "about": String,
+  "agency": String,
+  "properties": [Number], // 2-way embeddeing, with ids as foreign keys
+  "appointments": [{
+    "appointment_id": Number,
+    "contactClient": {
+      "client_id": Number,
+      "nameClient": String,
+      "phone": String,
+      "email": String
+    },
+    "time": Date,
+    "inPerson": Boolean,
+    "zoom": String
+  }]
 }));
 
 module.exports.Property = PropertyPriceModel;

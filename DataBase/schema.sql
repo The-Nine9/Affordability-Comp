@@ -1,48 +1,69 @@
 CREATE DATABASE IF NOT EXISTS mortgage;
--- WITH
---    [OWNER =  admin]
---    [TEMPLATE = template]
---    [ENCODING = encoding]
---    [LC_COLLATE = collate]
---    [ALLOW_CONNECTIONS = true]
---    [CONNECTION LIMIT = -1] -- huhh
---    [IS_TEMPLATE = false ];
 
 DROP TABLE IF EXISTS Properties;
 DROP TABLE IF EXISTS Agents;
+DROP TABLE IF EXISTS JoinAgentsProperties;
 DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS Contacts;
+DROP TABLE IF EXISTS HOAs;
 
 CREATE TABLE IF NOT EXISTS Properties (
-  property_id SERIAL NOT NULL PRIMARY KEY,
-  PRIMARY KEY(property_id),
-  homePrice INTEGER NOT NULL -- CHECK ( price > 0 AND price < 1000000000)
+  property_id SERIAL NOT NULL, PRIMARY KEY(property_id),
+  CONSTRAINT hoa_key
+    FOREIGN KEY (HOAs)
+      REFERENCES hoa_id(HOAs),
+  homePrice INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
-  agent_id SERIAL NOT NULL,
-  PRIMARY KEY(agent_id),
+  agent_id SERIAL NOT NULL, PRIMARY KEY(agent_id),
   name VARCHAR(50) NOT NULL,
   title VARCHAR(50) NOT NULL,
-  rating INTEGER NOT NULL, -- CHECK ( rating > 0 AND rating <= 5),
-  recentSales INTEGER NOT NULL, -- CHECK ( recentSales >= 0 AND recentSales <= 1000),
+  rating INTEGER NOT NULL,
+  recentSales INTEGER NOT NULL,
   phone VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL,
   avatar VARCHAR(50) NOT NULL,
   about VARCHAR(50) NOT NULL,
   agency VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Appointments (
-  CONSTRAINT agent_key
+CREATE TABLE IF NOT EXISTS JoinAgentsProperties (
+  CONSTRAINT property_key
     FOREIGN KEY (Properties)
       REFERENCES property_id(Properties),
   CONSTRAINT agent_key
     FOREIGN KEY (Agents)
       REFERENCES agent_id(Agents),
+);
+
+CREATE TABLE IF NOT EXISTS Appointments (
+  appointment_id SERIAL NOT NULL, PRIMARY KEY(appointment_id),
+  CONSTRAINT property_key
+    FOREIGN KEY (Properties)
+      REFERENCES property_id(Properties),
+  CONSTRAINT agent_key
+    FOREIGN KEY (Agents)
+      REFERENCES agent_id(Agents),
+  CONSTRAINT client_key
+    FOREIGN KEY (Clients)
+      REFERENCES client_id(Clients),
   inPerson BOOLEAN,
   date VARCHAR(50) NOT NULL,
-  time VARCHAR(50) NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  financing BOOLEAN NOT NULL,
+  zoom VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Clients (
+  client_id SERIAL NOT NULL, PRIMARY KEY(client_id),
   name VARCHAR(50) NOT NULL,
   phone VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL,
-  financing BOOLEAN
+  email VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS HOAs (
+  hoa_id SERIAL NOT NULL, PRIMARY KEY(hoa_id),
+  name VARCHAR(50) NOT NULL,
+  fee INTEGER NOT NULL,
 );
