@@ -1,29 +1,34 @@
-## Server API
+# Server API
+
+## PROPERTIES
 
 ### Create a Property
-  * POST "/mortgageAPI/property/:id"
+  * POST "/mortgageAPI/property"
 **Success Status Code:** "201"
 **Request Body:** json with keys...
 ```json
     {
-      "id": Number,
       "price": Number,
+      "beds": Number,
+      "baths": Number,
       "hoa": {
         "name": String,
         "fee": Number
       },
       "appointments": [{
-        "nameAgent": String,
-        "nameClient": String,
+        "appointment_id": Number,
         "contactAgent": {
+          "name": String,
           "phone": String,
           "email": String
         },
         "contactClient": {
+          "client_id": Number,
+          "name": String,
           "phone": String,
           "email": String
         },
-        "time": Date,
+        "date": Date,
         "inPerson": Boolean,
         "zoom":  String,
       }]
@@ -39,29 +44,33 @@
     {
       "id": Number,
       "price": Number,
+      "beds": Number,
+      "baths": Number,
       "hoa": {
         "name": String,
         "fee": Number
       },
       "appointments": [{
-        "nameAgent": String,
-        "nameClient": String,
+        "appointment_id": Number,
         "contactAgent": {
+          "name": String,
           "phone": String,
           "email": String
         },
         "contactClient": {
+          "client_id": Number,
+          "name": String,
           "phone": String,
           "email": String
         },
-        "time": Date,
+        "date": Date,
         "inPerson": Boolean,
         "zoom":  String,
       }]
     }
 ```
 
-### Update property listing info
+### Update a property
   * PATCH "/mortgageAPI/listing/:id"
 **Path Parameters:**
   * "id" property listing`s id
@@ -69,24 +78,27 @@
 **Request Body**: Expects JSON with any of the following keys (include only keys to be updated)
 ```json
     {
-      "id": Number,
       "price": Number,
+      "beds": Number,
+      "baths": Number,
       "hoa": {
         "name": String,
         "fee": Number
       },
       "appointments": [{
-        "nameAgent": String,
-        "nameClient": String,
+        "appointment_id": Number,
         "contactAgent": {
+          "name": String,
           "phone": String,
           "email": String
         },
         "contactClient": {
+          "client_id": Number,
+          "name": String,
           "phone": String,
           "email": String
         },
-        "time": Date,
+        "date": Date,
         "inPerson": Boolean,
         "zoom":  String,
       }]
@@ -99,10 +111,12 @@
   * "id" property listing"s id
 **Success Status Code:** "204"
 
+## AGENTS
+
 ### Create an agent
   * POST "/api/agent/:name"
 **Path Paramaters:**
-  * "name" the agent"s name
+  * "name" the agent's name
 **Success Status Code:** "201"
 **Request Body**: Expects JSON with the following keys.
 ```json
@@ -112,40 +126,35 @@
       "rating": Number,
       "recentSales": Number,
       "phone": String,
-      "avatar": String,   // s3 resource
-      "about": String,    // a description
-      "agency": String,   // employer
-      "appointments": [{
-        "nameClient": String,
-        "contactClient": {
-          "phone": String,
-          "email": String
-        },
-        "time": Date,
-        "inPerson": Boolean,
-        "zoom": String
-      }]
+      "email": String,
+      "avatar": String,
+      "about": String,
+      "agency": String,
     }
 ```
 
 ### Read all data about an agent
   * GET "/mortgageAPI/agent/:name"
 **Path Paramaters**
-  * "name" the agent"s name
+  * "name" the agent's name
 **Returns** json
 ```json
     {
+      "agent_id": Number,
       "name": String,
       "title": String,
       "rating": Number,
       "recentSales": Number,
       "phone": String,
-      "avatar": String,   // s3 resource
-      "about": String,    // a description
-      "agency": String,   // employer
+      "email": String,
+      "avatar": String,
+      "about": String,
+      "agency": String,
       "appointments": [{
-        "nameClient": String,
+        "appointment_id": Number,
         "contactClient": {
+          "client_id": Number,
+          "name": String,
           "phone": String,
           "email": String
         },
@@ -159,34 +168,85 @@
 ### Update the data about an agent
   * PATCH "/mortgageAPI/agent/:name"
 **Path Parameters:**
-  * "name" the agent"s name
+  * "name" the agent's name
 **Success Status Code:** "204"
 **Request Body**: Expects JSON with any of the following keys (include only keys to be updated)
 ```json
     {
+      "agent_id": Number,
       "name": String,
       "title": String,
       "rating": Number,
       "recentSales": Number,
       "phone": String,
-      "avatar": String,   // s3 resource
-      "about": String,    // a description
-      "agency": String,   // employer
-      "appointments": [{
-        "nameClient": String,
-        "contactClient": {
-          "phone": String,
-          "email": String
-        },
-        "time": Date,
-        "inPerson": Boolean,
-        "zoom": String
-      }]
+      "email": String,
+      "avatar": String,
+      "about": String,
+      "agency": String,
     }
 ```
 
 ### Delete an agent
   * DELETE "/mortgageAPI/agent/:name"
 **Route Paramaters:**
-  * "name" the agent"s name
+  * "name" the agent's name
 **Success Status Code:** "204"
+
+### Associate an agent with a property listing
+  * POST "/mortgageAPI/agent/:name/property/:address"
+**Route Paramaters:**
+  * "name" the agent's name
+**Success Status Code:** 201
+
+## APPOINTMENTS
+
+### Book an appointment for an agent
+  * POST "/mortgageAPI/agent/:name/appointment"
+**Route Paramaters:**
+  * "name" the agent's name
+**Success Status Code:** "201"
+**Request Body:** Expects JSON with the following keys:
+```json
+  {
+    "contactAgent": {
+      "name": String,
+      "phone": String,
+      "email": String
+    },
+    "contactClient": {
+      "name": String,
+      "phone": String,
+      "email": String
+    }
+  }
+```
+
+### Update an appointment for an agent
+  * PATCH "/mortgageAPI/agent/:name/appointment"
+**Route Paramaters:**
+  * "name" the agent's name
+**Success Status Code:** "204"
+**Request Body**: Expects JSON with any of the following keys (include only keys to be updated)
+
+```json
+  {
+    "contactAgent": {
+      "name": String,
+      "phone": String,
+      "email": String
+    },
+    "contactClient": {
+      "name": String,
+      "phone": String,
+      "email": String
+    }
+  }
+```
+
+### Delete an appointment for an agent
+  * DELETE "/mortgageAPI/agent/:name/appointment/:client"
+**Route Paramaters:**
+  * "name" the agent's name
+  * "client" the name of the client who's appointment will be deleted
+**Success Status Code:** "204"
+
