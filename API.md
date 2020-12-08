@@ -249,4 +249,3 @@
   * "name" the agent's name
   * "client" the name of the client who's appointment will be deleted
 **Success Status Code:** "204"
-

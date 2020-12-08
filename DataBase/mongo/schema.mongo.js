@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const Property = mongoose.model("Property", new mongoose.Schema({
   "property_id": Number,
   "price": Number,
+  "beds": Number,
+  "baths": Number,
+  "address": String,
   "hoa": {
     "name": String,
     "fee": Number
@@ -11,13 +14,13 @@ const Property = mongoose.model("Property", new mongoose.Schema({
   "appointments": [{
     "appointment_id": Number,
     "contactAgent": {
-      "nameAgent": String,
+      "name": String,
       "phone": String,
       "email": String
     },
     "contactClient": {
       "client_id": Number,
-      "nameClient": String,
+      "name": String,
       "phone": String,
       "email": String
     },
@@ -43,7 +46,7 @@ const Agent = mongoose.model("Agent", new mongoose.Schema({
     "appointment_id": Number,
     "contactClient": {
       "client_id": Number,
-      "nameClient": String,
+      "name": String,
       "phone": String,
       "email": String
     },
