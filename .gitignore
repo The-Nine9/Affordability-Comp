@@ -1,2 +1,6 @@
 node_modules
 client/dist/bundle.js
+
+*.csv
+DataBase/mongo/mongo.csv
+DataBase/psql/psql.csv
