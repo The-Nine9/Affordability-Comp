@@ -26,7 +26,7 @@ const datadir = Path.join(__dirname, "data");
 
 module.exports.properties = () => {
   let path = Path.join(datadir, "properties.csv");
-  let header = "hoa_key, homePrice, address, beds, baths\n";
+  let header = "hoa_key,homePrice,address,beds,baths\n";
   let generator = () => {
     return "" +
       `${faker.random.boolean()
@@ -50,7 +50,7 @@ module.exports.properties = () => {
 
 module.exports.hoas = () => {
   let path = Path.join(datadir, "hoas.csv");
-  let header = "name, fee\n";
+  let header = "name,fee\n";
   let generator = () => {
     return "" +
       `${faker.company.companyName().noCommas()},` +
@@ -69,7 +69,7 @@ module.exports.hoas = () => {
 
 module.exports.agents = () => {
   let path = Path.join(datadir, "agents.csv");
-  let header = "name, title, rating, recentSales, phone, email, avatar, about, agency\n";
+  let header = "name,title,rating,recentSales,phone,email,avatar, about, agency\n";
   let generator = () => {
     return "" +
       `${faker.name.findName().noCommas()},` +
@@ -95,7 +95,7 @@ module.exports.agents = () => {
 
 module.exports.joinAgentsProperties = () => {
   let path = Path.join(datadir, "joinAgentsProperties.csv");
-  let header = "property_key, agent_key\n";
+  let header = "property_key,agent_key\n";
   let property_key = 0;
   let generator = () => {
     property_key += 0.2;
@@ -116,7 +116,7 @@ module.exports.joinAgentsProperties = () => {
 
 module.exports.appointments = () => {
   let path = Path.join(datadir, "appointments.csv");
-  let header = "property_key, agent_key, client_key, inPerson, date, name, financing, zoom\n";
+  let header = "property_key,agent_key,client_key,inPerson,date,name, financing,zoom\n";
   let generator = () => {
     return "" +
       `${faker.random.number({"min": 1, "max": tenMillion})},` +
@@ -141,7 +141,7 @@ module.exports.appointments = () => {
 
 module.exports.clients = () => {
   let path = Path.join(datadir, "clients.csv");
-  let header = "name, phone, email\n";
+  let header = "name,phone,email\n";
   let generator = () => {
     return "" +
       `${faker.name.findName().noCommas()},` +
