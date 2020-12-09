@@ -1,0 +1,43 @@
+SDC Timeline
+
+### High-Level
+
+[ X ] Select app and services
+[ X ] Update the API to be fully CRUD capable
+[ X ] Choose 2 databases you haven’t used already (one SQL, one no-SQL)
+[ * ] Generate 10m records and efficiently load into each database (db)
+[   ] Performance tune and benchmark test the queries for 2 db options 
+[   ] Choose one db to move forward with
+[   ] Stress test in development env. and report metrics from New Relic dashboard
+[   ] Deploy to AWS
+[   ] Stress test deployed service and report metrics from New Relic dashboard
+[   ] Attempt to scale to 10k rps
+
+### More Detail
+
+[ X ] Select app and services
+[ X ] Update the API to be fully CRUD capable
+	[ X ] Create a CRUD api to support the existing codebase 
+	[ X ] Update API with schema changes
+[ X ] Choose 2 databases, and build out the schema for each of them
+	[ X ] PostgresSQL
+	[ X ] MongoDB
+	[ X ] API + Schema approved by Susan
+[ X ] Install PostgresSQL
+	[ X ] Notes on basic commands are in hackreactor/sdc/notes_postgress
+[ ⅓ ] Generate 10m records and efficiently load into each db
+	[ X ] Generate csv for postgres
+	[ X ] Write csv header
+	[ X ] Write dummy data to loop thru
+	[ X ] Use fs to write .csv files 
+	[ X ] Generate JSON for mongo
+	[   ] Use .csv files to seed postgres
+	[   ] Write a script to add constraints to postgres, run after seeding
+	[   ] Use .json files to seed mongo
+
+
+[  ] Seed sql
+
+
+
+
