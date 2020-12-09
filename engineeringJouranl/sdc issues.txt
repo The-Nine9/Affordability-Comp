@@ -58,10 +58,14 @@ Theory
 Resolution
 	Signifigant refactoring with the team! 
 
-Issue: seeding postgres
-	Apply constraints to postgres schema AFTER seeding the db
-	Disable constrains for seeding speed (perhaps with ALTER TABLE)
-	
+Issue
+	DataBase/psql/csvMaker.psql.js does not appear in git, at all!
+Theory
+	It has been gitignored somehow (negative!)
+Resolution
+	An attempt to get the file un-ignored by renmaing it revealed that git was tracking it, as it was recognized as a "deleted" file.
+	I must have already commited all the recent changes? It's possible. I haven't been working on it for a while. ---> confirmed this by trying chaning a comment. It's up-to-date!
+ 
 
 
 
