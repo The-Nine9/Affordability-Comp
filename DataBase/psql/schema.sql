@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS Appointments;
 DROP TABLE IF EXISTS Clients;
 
 CREATE TABLE IF NOT EXISTS Properties (
-  property_id SERIAL NOT NULL, PRIMARY KEY(property_id),
+  property_id SERIAL PRIMARY KEY,
   -- CONSTRAINT hoa_key
   --   FOREIGN KEY (HOAs)
   --     REFERENCES hoa_id(HOAs),
@@ -18,26 +18,26 @@ CREATE TABLE IF NOT EXISTS Properties (
 );
 
 CREATE TABLE IF NOT EXISTS HOAs (
-  hoa_id SERIAL NOT NULL, PRIMARY KEY(hoa_id),
+  hoa_id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   fee INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
-  agent_id SERIAL NOT NULL, PRIMARY KEY(agent_id),
+  agent_id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   title VARCHAR(50) NOT NULL,
   rating INTEGER NOT NULL,
   recentSales INTEGER NOT NULL,
   phone VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL,
   avatar VARCHAR(50) NOT NULL,
-  about VARCHAR(50) NOT NULL,
+  about VARCHAR(150) NOT NULL,
   agency VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS JoinAgentsProperties (
-  id SERIAL NOT NULL, PRIMARY KEY(id),
+  id SERIAL PRIMARY KEY,
   -- CONSTRAINT property_key
   --   FOREIGN KEY (Properties)
   --     REFERENCES property_id(Properties),
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS JoinAgentsProperties (
 );
 
 CREATE TABLE IF NOT EXISTS Appointments (
-  appointment_id SERIAL NOT NULL, PRIMARY KEY(appointment_id),
+  appointment_id SERIAL PRIMARY KEY,
   -- CONSTRAINT property_key
   --   FOREIGN KEY (Properties)
   --     REFERENCES property_id(Properties),
@@ -70,9 +70,8 @@ CREATE TABLE IF NOT EXISTS Appointments (
 );
 
 CREATE TABLE IF NOT EXISTS Clients (
-  client_id SERIAL NOT NULL, PRIMARY KEY(client_id),
+  client_id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   phone VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL
 );
-
