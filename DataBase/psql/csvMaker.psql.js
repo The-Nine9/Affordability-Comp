@@ -17,6 +17,7 @@ const Path = require("path");
 const faker = require("faker");
 
 const { writeAnyTimes } = require("../util/write.js");
+const noCommas = require("../util/noCommas.js");
 
 const tenMillion = 10000000;
 const tenThousand = 10000;
@@ -32,7 +33,7 @@ module.exports.properties = () => {
         ? faker.random.number({"min": 1, "max": 10000})
         : -1},` +
       `${faker.random.number({"min": 100000, "max": 20000000})},`+
-      `${faker.address.streetAddress()},`+
+      `${faker.address.streetAddress().noCommas()},`+
       `${faker.random.number({"min": 1, "max": 7})},`+
       `${faker.random.number({"min": 1, "max": 7})}\n`;
   };
@@ -52,7 +53,7 @@ module.exports.hoas = () => {
   let header = "name, fee\n";
   let generator = () => {
     return "" +
-      `${faker.company.companyName()},` +
+      `${faker.company.companyName().noCommas()},` +
       `${faker.random.number({"min": 100, "max": 1000})}\n`;
   };
   // console.log(generator());
@@ -71,14 +72,15 @@ module.exports.agents = () => {
   let header = "name, title, rating, recentSales, phone, email, avatar, about, agency\n";
   let generator = () => {
     return "" +
-      `${faker.name.findName()},` +
-      `${faker.name.jobTitle()},` +
+      `${faker.name.findName().noCommas()},` +
+      `${faker.name.jobTitle().noCommas()},` +
       `${faker.random.number({"min": 1, "max": 5})},` +
       `${faker.random.number({"min": 10, "max": 200})},` +
-      `${faker.phone.phoneNumber()},` +
-      `${faker.internet.email()},` +
+      `${faker.phone.phoneNumber().noCommas()},` +
+      `${faker.internet.email().noCommas()},` +
       "https://loremflickr.com/100/100/face," +
-      `${faker.company.companyName()}` + '\n';
+      `${faker.commerce.productDescription().noCommas()},` +
+      `${faker.company.companyName().noCommas()}` + '\n';
   };
   // console.log(generator());
   writeAnyTimes(
@@ -122,7 +124,7 @@ module.exports.appointments = () => {
       `${faker.random.number({"min": 1, "max": tenThousand})},` +
       `${faker.random.boolean()},` +
       `${faker.date.soon()},` +
-      `${faker.name.findName()},` +
+      `${faker.name.findName().noCommas()},` +
       `${faker.random.boolean()},` +
       `https://us02web.zoom.us/j/${faker.random.number({"min": tenMillion, "max": 123*tenMillion})}\n`;
   };
@@ -142,9 +144,9 @@ module.exports.clients = () => {
   let header = "name, phone, email\n";
   let generator = () => {
     return "" +
-      `${faker.name.findName()},` +
-      `${faker.phone.phoneNumber()},` +
-      `${faker.internet.email()}\n`;
+      `${faker.name.findName().noCommas()},` +
+      `${faker.phone.phoneNumber().noCommas()},` +
+      `${faker.internet.email().noCommas()}\n`;
   };
   // console.log(generator());
   writeAnyTimes(
