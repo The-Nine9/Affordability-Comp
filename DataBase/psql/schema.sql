@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS mortgage;
-
 DROP TABLE IF EXISTS Properties;
 DROP TABLE IF EXISTS HOAs;
 DROP TABLE IF EXISTS Agents;
@@ -9,9 +7,10 @@ DROP TABLE IF EXISTS Clients;
 
 CREATE TABLE IF NOT EXISTS Properties (
   property_id SERIAL NOT NULL, PRIMARY KEY(property_id),
-  CONSTRAINT hoa_key
-    FOREIGN KEY (HOAs)
-      REFERENCES hoa_id(HOAs),
+  -- CONSTRAINT hoa_key
+  --   FOREIGN KEY (HOAs)
+  --     REFERENCES hoa_id(HOAs),
+  hoa_key INTEGER NOT NULL,
   homePrice INTEGER NOT NULL,
   address VARCHAR(50) NOT NULL,
   beds INTEGER NOT NULL,
@@ -21,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Properties (
 CREATE TABLE IF NOT EXISTS HOAs (
   hoa_id SERIAL NOT NULL, PRIMARY KEY(hoa_id),
   name VARCHAR(50) NOT NULL,
-  fee INTEGER NOT NULL,
+  fee INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
@@ -39,25 +38,30 @@ CREATE TABLE IF NOT EXISTS Agents (
 
 CREATE TABLE IF NOT EXISTS JoinAgentsProperties (
   id SERIAL NOT NULL, PRIMARY KEY(id),
-  CONSTRAINT property_key
-    FOREIGN KEY (Properties)
-      REFERENCES property_id(Properties),
-  CONSTRAINT agent_key
-    FOREIGN KEY (Agents)
-      REFERENCES agent_id(Agents)
+  -- CONSTRAINT property_key
+  --   FOREIGN KEY (Properties)
+  --     REFERENCES property_id(Properties),
+  -- CONSTRAINT agent_key
+  --   FOREIGN KEY (Agents)
+  --     REFERENCES agent_id(Agents)
+  property_key INTEGER NOT NULL,
+  agent_key INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Appointments (
   appointment_id SERIAL NOT NULL, PRIMARY KEY(appointment_id),
-  CONSTRAINT property_key
-    FOREIGN KEY (Properties)
-      REFERENCES property_id(Properties),
-  CONSTRAINT agent_key
-    FOREIGN KEY (Agents)
-      REFERENCES agent_id(Agents),
-  CONSTRAINT client_key
-    FOREIGN KEY (Clients)
-      REFERENCES client_id(Clients),
+  -- CONSTRAINT property_key
+  --   FOREIGN KEY (Properties)
+  --     REFERENCES property_id(Properties),
+  -- CONSTRAINT agent_key
+  --   FOREIGN KEY (Agents)
+  --     REFERENCES agent_id(Agents),
+  -- CONSTRAINT client_key
+  --   FOREIGN KEY (Clients)
+  --     REFERENCES client_id(Clients),
+  property_key INTEGER NOT NULL,
+  agent_key INTEGER NOT NULL,
+  client_key INTEGER NOT NULL,
   inPerson BOOLEAN,
   date VARCHAR(50) NOT NULL,
   name VARCHAR(50) NOT NULL,
