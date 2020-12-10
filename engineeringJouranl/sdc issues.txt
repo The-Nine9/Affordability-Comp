@@ -1,0 +1,138 @@
+Issue:
+	Fully understand the existing DB and its API
+Theory:
+	It very likely doesn't have that much
+	Q: Only collection is for prices? What about agents + schedules schemas? they're unused schemas?
+Resolution:
+	dev mode for webpack
+	server/index.js lines about brotlicompression
+
+Issue
+	attempting to run npm start, and i get "sh: nodemon: command not found"
+Theory
+	nodemon is not listed as a dependency in package.json
+Resolution
+	installed nodemon --> Listening on 
+
+Issue
+	attempting to run npm react-dev, error Algorithm "brotliCompress" is not found in "zlib"
+Theory
+	I need to install additional compression libraries
+Resolution?
+	Q for Blake?
+
+Issue
+	there is no apparent endpoint which would access the getAll() method from mongoCont, but the perteinent test passes anyways.
+Theory
+	I haven't found the endpoint yet
+Resolution
+
+Issue
+	I downloaded + installed postgres from the webstie, but couldn't use common cli commands. I then downloaded postgress with brew, and installed with brew. Now I have the ability to run posgress cli commands, but on attempting to start the postgress service, I am getting an error message that the port is in use by another "postmaster" - the port number 5432 indicates to me that the new, homebrew-installed postgress service is conflicting with the original installation.
+Theory
+  I need to kill the existing postgres service.
+Actions
+	I did sudo rm -r on the postgres directory in /Library.
+Result
+	It looks like deleting that directory has allowed me to beign postgres with the postgres-init command I added to my bashrc. I'm going to continue working thru the tutorial @ https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
+
+Issue
+  The data in my csv appears backwards
+Resolution
+  Refactoring writeStrings() from a do-while to a for loop fixed this.
+
+Issue
+	The null values for HOA keys aren't printing
+Resolution
+	Switched from using null to represent no HOA, to using -1.
+
+Issue
+	After running my properties() csv generation function, I got an error message about the JS heap running out of memory; see "sand/sed error 545am". Running the script with 1/100th the amount of records attempted resulted in success.
+Theory
+	I am attempting to do so much computing work, that my system can't handle it.
+	I could increase the memory limit. 1.7GB standard?
+	@ https://stackoverflow.com/questions/38558989/node-js-heap-out-of-memory
+  Set node environment variable
+  $ node --max-old-space-size=4096 yourFile.js // this is 4gb, and was not enough
+  $ node --max-old-space-size=7168 yourFile.js // try 7gb, still ran out
+Resolution
+	Signifigant refactoring with the team! 
+
+Issue
+	DataBase/psql/csvMaker.psql.js does not appear in git, at all!
+Theory
+	It has been gitignored somehow (negative!)
+Resolution
+	An attempt to get the file un-ignored by renmaing it revealed that git was tracking it, as it was recognized as a "deleted" file.
+	I must have already commited all the recent changes? It's possible. I haven't been working on it for a while. ---> confirmed this by trying chaning a comment. It's up-to-date!
+
+Issue
+	Some of my .csv files include the delimmitter character ","
+Theory
+	I can write a helper function to eliminate commas from strings
+Resolution?
+	I the helper function and attached it to to strings generated in my csv generator. It's cooking files now, we'll see if I get any errors when I go to copy csvs over into the db.
+
+Issue
+	Seeding my postgress db with my .csv files
+Theory
+	Either (a) seed with a script, or (b) use a psql-cli command
+Resolution?
+	Try (b) ---> @ https://www.postgresql.org/docs/9.2/sql-copy.html
+	=> COPY table_name [column name, column name]
+			FROM 
+
+Issue:
+	When copying from csv into my postgres db from the psql-cli, I encountered this data type error:
+		mortgage=# COPY agents FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
+		ERROR:  invalid input syntax for type integer: "name, title, rating, recentSales, phone, email, avatar, about, agency"
+		CONTEXT:  COPY agents, line 1, column agent_id: "name, title, rating, recentSales, phone, email, avatar, about, agency"
+	This looks like and issue with the agent_id field not auto-incrementing as I thought it would; notice that I do not insert on that field.
+Theory
+	a) modify my csv generators to insert on the id fields
+	b) modify my psql schema to work the way I originally wanted it to
+Resolution?
+	Got an answer from Blake; persuing route (b) by modifying primary key declarations
+		Wrong: client_id SERIAL NOT NULL, PRIMARY KEY(client_id),
+		Right: client_id SERIAL PRIMARY KEY,
+	After taking those actions, I recieved the same error.	
+	Relevant Q @
+		https://stackoverflow.com/questions/36368496/pg-copy-error-invalid-input-syntax-for-integer-when-importing-quoted-csv-file
+	Specify the columns... 
+		COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
+
+Issue:
+	Error: varchar size limits! Trying making every varchar 280 chars long (a tweet). Q
+		@ stackoverflow.com/questions/25593338/how-to-import-tables-with-missing-values
+Theory:
+		Try adding an explicit delimiter to my query: maybe it doesn't recognize the columns in my csv, since it doesn't know to split on the ","?
+			COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' WITH DELIMITER ',';
+		I have a space added to my columns in the header
+			ERROR:  invalid input syntax for type integer: " rating"
+			CONTEXT:  COPY agents, line 1, column rating: " rating"
+		--> try eliminating spaces from query?
+Resolution:
+	Sean+Blake suggest CSV HEADER, also using WITH is optional:
+		COPY agents (name,title,rating,recentSales,phone,email,avatar,about,agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' DELIMITER ',' CSV HEADER;
+	the error would make sense if it’s perceiving the csv header as data, i.e. putting the string from the header into the integer field.
+
+Issue:
+	Attempted to run $node seed.psql.js.
+	Got a very long error message: see "error_wed_610pm"
+	"ERROR: must be a superuser or...", for all six tables
+Theory:
+	Add role to the seeder user
+Resolution:
+	Use psql cli ALTER ROLE
+		a) make seeder a superuser? --> go for it
+		b) give seeder limited privilege? --> may be complicated
+	-# ALTER ROLE 
+	--> superuser privilege for seeder got that fixed.
+
+
+
+
+
+
+
+
