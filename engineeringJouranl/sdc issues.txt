@@ -65,16 +65,56 @@ Theory
 Resolution
 	An attempt to get the file un-ignored by renmaing it revealed that git was tracking it, as it was recognized as a "deleted" file.
 	I must have already commited all the recent changes? It's possible. I haven't been working on it for a while. ---> confirmed this by trying chaning a comment. It's up-to-date!
- 
 
+Issue
+	Some of my .csv files include the delimmitter character ","
+Theory
+	I can write a helper function to eliminate commas from strings
+Resolution?
+	I the helper function and attached it to to strings generated in my csv generator. It's cooking files now, we'll see if I get any errors when I go to copy csvs over into the db.
 
+Issue
+	Seeding my postgress db with my .csv files
+Theory
+	Either (a) seed with a script, or (b) use a psql-cli command
+Resolution?
+	Try (b) ---> @ https://www.postgresql.org/docs/9.2/sql-copy.html
+	=> COPY table_name [column name, column name]
+			FROM 
 
+Issue:
+	When copying from csv into my postgres db from the psql-cli, I encountered this data type error:
+		mortgage=# COPY agents FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
+		ERROR:  invalid input syntax for type integer: "name, title, rating, recentSales, phone, email, avatar, about, agency"
+		CONTEXT:  COPY agents, line 1, column agent_id: "name, title, rating, recentSales, phone, email, avatar, about, agency"
+	This looks like and issue with the agent_id field not auto-incrementing as I thought it would; notice that I do not insert on that field.
+Theory
+	a) modify my csv generators to insert on the id fields
+	b) modify my psql schema to work the way I originally wanted it to
+Resolution?
+	Got an answer from Blake; persuing route (b) by modifying primary key declarations
+		Wrong: client_id SERIAL NOT NULL, PRIMARY KEY(client_id),
+		Right: client_id SERIAL PRIMARY KEY,
+	After taking those actions, I recieved the same error.	
+	Relevant Q @
+		https://stackoverflow.com/questions/36368496/pg-copy-error-invalid-input-syntax-for-integer-when-importing-quoted-csv-file
+	Specify the columns... 
+		COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
 
-
-
-
-
-
+Issue:
+	Error: varchar size limits! Trying making every varchar 280 chars long (a tweet). Q
+		@ stackoverflow.com/questions/25593338/how-to-import-tables-with-missing-values
+Theory:
+		Try adding an explicit delimiter to my query: maybe it doesn't recognize the columns in my csv, since it doesn't know to split on the ","?
+			COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' WITH DELIMITER ',';
+		I have a space added to my columns in the header
+			ERROR:  invalid input syntax for type integer: " rating"
+			CONTEXT:  COPY agents, line 1, column rating: " rating"
+		--> try eliminating spaces from query?
+Resolution:
+	Sean+Blake suggest CSV HEADER, also using WITH is optional:
+		COPY agents (name,title,rating,recentSales,phone,email,avatar,about,agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' DELIMITER ',' CSV HEADER;
+	the error would make sense if it’s perceiving the csv header as data, i.e. putting the string from the header into the integer field.
 
 
 
