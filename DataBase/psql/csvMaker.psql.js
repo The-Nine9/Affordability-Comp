@@ -17,6 +17,7 @@ const Path = require("path");
 const faker = require("faker");
 
 const { writeAnyTimes } = require("../util/write.js");
+const noCommas = require("../util/noCommas.js");
 
 const tenMillion = 10000000;
 const tenThousand = 10000;
@@ -25,14 +26,14 @@ const datadir = Path.join(__dirname, "data");
 
 module.exports.properties = () => {
   let path = Path.join(datadir, "properties.csv");
-  let header = "hoa_key, homePrice, address, beds, baths\n";
+  let header = "hoa_key,homePrice,address,beds,baths\n";
   let generator = () => {
     return "" +
       `${faker.random.boolean()
         ? faker.random.number({"min": 1, "max": 10000})
         : -1},` +
       `${faker.random.number({"min": 100000, "max": 20000000})},`+
-      `${faker.address.streetAddress()},`+
+      `${faker.address.streetAddress().noCommas()},`+
       `${faker.random.number({"min": 1, "max": 7})},`+
       `${faker.random.number({"min": 1, "max": 7})}\n`;
   };
@@ -49,10 +50,10 @@ module.exports.properties = () => {
 
 module.exports.hoas = () => {
   let path = Path.join(datadir, "hoas.csv");
-  let header = "name, fee\n";
+  let header = "name,fee\n";
   let generator = () => {
     return "" +
-      `${faker.company.companyName()},` +
+      `${faker.company.companyName().noCommas()},` +
       `${faker.random.number({"min": 100, "max": 1000})}\n`;
   };
   // console.log(generator());
@@ -68,17 +69,18 @@ module.exports.hoas = () => {
 
 module.exports.agents = () => {
   let path = Path.join(datadir, "agents.csv");
-  let header = "name, title, rating, recentSales, phone, email, avatar, about, agency\n";
+  let header = "name,title,rating,recentSales,phone,email,avatar, about, agency\n";
   let generator = () => {
     return "" +
-      `${faker.name.findName()},` +
-      `${faker.name.jobTitle()},` +
+      `${faker.name.findName().noCommas()},` +
+      `${faker.name.jobTitle().noCommas()},` +
       `${faker.random.number({"min": 1, "max": 5})},` +
       `${faker.random.number({"min": 10, "max": 200})},` +
-      `${faker.phone.phoneNumber()},` +
-      `${faker.internet.email()},` +
+      `${faker.phone.phoneNumber().noCommas()},` +
+      `${faker.internet.email().noCommas()},` +
       "https://loremflickr.com/100/100/face," +
-      `${faker.company.companyName()}` + '\n';
+      `${faker.commerce.productDescription().noCommas()},` +
+      `${faker.company.companyName().noCommas()}` + '\n';
   };
   // console.log(generator());
   writeAnyTimes(
@@ -93,7 +95,7 @@ module.exports.agents = () => {
 
 module.exports.joinAgentsProperties = () => {
   let path = Path.join(datadir, "joinAgentsProperties.csv");
-  let header = "property_key, agent_key\n";
+  let header = "property_key,agent_key\n";
   let property_key = 0;
   let generator = () => {
     property_key += 0.2;
@@ -114,7 +116,7 @@ module.exports.joinAgentsProperties = () => {
 
 module.exports.appointments = () => {
   let path = Path.join(datadir, "appointments.csv");
-  let header = "property_key, agent_key, client_key, inPerson, date, name, financing, zoom\n";
+  let header = "property_key,agent_key,client_key,inPerson,date,name, financing,zoom\n";
   let generator = () => {
     return "" +
       `${faker.random.number({"min": 1, "max": tenMillion})},` +
@@ -122,7 +124,7 @@ module.exports.appointments = () => {
       `${faker.random.number({"min": 1, "max": tenThousand})},` +
       `${faker.random.boolean()},` +
       `${faker.date.soon()},` +
-      `${faker.name.findName()},` +
+      `${faker.name.findName().noCommas()},` +
       `${faker.random.boolean()},` +
       `https://us02web.zoom.us/j/${faker.random.number({"min": tenMillion, "max": 123*tenMillion})}\n`;
   };
@@ -139,12 +141,12 @@ module.exports.appointments = () => {
 
 module.exports.clients = () => {
   let path = Path.join(datadir, "clients.csv");
-  let header = "name, phone, email\n";
+  let header = "name,phone,email\n";
   let generator = () => {
     return "" +
-      `${faker.name.findName()},` +
-      `${faker.phone.phoneNumber()},` +
-      `${faker.internet.email()}\n`;
+      `${faker.name.findName().noCommas()},` +
+      `${faker.phone.phoneNumber().noCommas()},` +
+      `${faker.internet.email().noCommas()}\n`;
   };
   // console.log(generator());
   writeAnyTimes(

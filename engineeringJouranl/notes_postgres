@@ -2,17 +2,30 @@ from bash:
 	psql postgres #Connect to the database 'postgres' (can make others)
 
 get ifno in psql cli:
-	\conninfo #
+	\conninfo # check port number, and more
 	\q #exit psql clit
 	\c #connect to a new db
 	\dt #show all relations
 	\du #show all 'roles' (users and what they can do)
 	\list #show all databases
+	show data_directory; // where is data located?
+	SELECT COUNT(*) FROM table [WHERE condition];
 
 change user roles:
 	CREATE ROLE uname WITH LOGIN PASSWORD 'somepasswd';
 	DROP ROLE uname;
 	ALTER ROLE uname CREATEDB; #let uname make new dbs
+
+modify a table, useful for adding constraints after seeding,
+seeding a table with constraints is slower
+	@ https://www.postgresqltutorial.com/postgresql-foreign-key/
+	ALTER TABLE child_table 
+		ADD CONSTRAINT constraint_name 
+			FOREIGN KEY (fk_columns) 
+				REFERENCES parent_table (parent_key_columns);
+Check that a constraint is valid
+	ALTER TABLE distributors VALIDATE CONSTRAINT distfk;
+	
 
 cli prompts:
 	[state][user]

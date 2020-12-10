@@ -1,21 +1,34 @@
 const fs = require("fs");
 const stream = require("stream");
 
-
 // https://nodejs.org/api/stream.html#stream_event_drain
-// Write the data to the supplied writable stream one million times.
 // Be attentive to back-pressure.
-function writeAnyTimes(writer, header, generator, times, encoding, callback) {
-  writer.write(header, encoding);
+function writeAnyTimes(
+  writer, // create a stream using fs.createWriteStream()
+  header, // string, the header of the csv
+  generator, // body of document, function, on each call generator returns a comma-delimited, newline-terminated
+  times, // number, entries in the csv
+  encoding, // just make this string 'utf8'
+  callback, // i only use this callback to console log that it's done
+  tail=null, // string, end of document
+  ) {
+  if (header) {
+    writer.write(header, encoding);
+  }
   let i = times;
   write();
   function write() {
     let ok = true;
     do {
       i--;
-      let datum = generator();
+      let datum = generator(i, times);
       if (i === 0) {
-        writer.write(datum, encoding, callback);
+        if (!tail) {
+          writer.write(datum, encoding, callback);
+        } else {
+          writer.write(datum, encoding);
+          writer.write(tail, encoding, callback);
+        }
       } else {
         ok = writer.write(datum, encoding);
       }

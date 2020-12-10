@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+mongoose.connect("mongodb://localhost/sdcMortgages");
+
 const Property = mongoose.model("Property", new mongoose.Schema({
   "property_id": Number,
   "price": Number,
@@ -56,5 +58,5 @@ const Agent = mongoose.model("Agent", new mongoose.Schema({
   }]
 }));
 
-module.exports.Property = PropertyPriceModel;
-module.exports.Agent = MortgageAgentModel;
+module.exports.Property = Property;
+module.exports.Agent = Agent;

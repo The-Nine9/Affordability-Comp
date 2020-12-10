@@ -58,10 +58,128 @@ Theory
 Resolution
 	Signifigant refactoring with the team! 
 
-Issue: seeding postgres
-	Apply constraints to postgres schema AFTER seeding the db
-	Disable constrains for seeding speed (perhaps with ALTER TABLE)
-	
+Issue
+	DataBase/psql/csvMaker.psql.js does not appear in git, at all!
+Theory
+	It has been gitignored somehow (negative!)
+Resolution
+	An attempt to get the file un-ignored by renmaing it revealed that git was tracking it, as it was recognized as a "deleted" file.
+	I must have already commited all the recent changes? It's possible. I haven't been working on it for a while. ---> confirmed this by trying chaning a comment. It's up-to-date!
+
+Issue
+	Some of my .csv files include the delimmitter character ","
+Theory
+	I can write a helper function to eliminate commas from strings
+Resolution?
+	I the helper function and attached it to to strings generated in my csv generator. It's cooking files now, we'll see if I get any errors when I go to copy csvs over into the db.
+
+Issue
+	Seeding my postgress db with my .csv files
+Theory
+	Either (a) seed with a script, or (b) use a psql-cli command
+Resolution?
+	Try (b) ---> @ https://www.postgresql.org/docs/9.2/sql-copy.html
+	=> COPY table_name [column name, column name]
+			FROM 
+
+Issue:
+	When copying from csv into my postgres db from the psql-cli, I encountered this data type error:
+		mortgage=# COPY agents FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
+		ERROR:  invalid input syntax for type integer: "name, title, rating, recentSales, phone, email, avatar, about, agency"
+		CONTEXT:  COPY agents, line 1, column agent_id: "name, title, rating, recentSales, phone, email, avatar, about, agency"
+	This looks like and issue with the agent_id field not auto-incrementing as I thought it would; notice that I do not insert on that field.
+Theory
+	a) modify my csv generators to insert on the id fields
+	b) modify my psql schema to work the way I originally wanted it to
+Resolution?
+	Got an answer from Blake; persuing route (b) by modifying primary key declarations
+		Wrong: client_id SERIAL NOT NULL, PRIMARY KEY(client_id),
+		Right: client_id SERIAL PRIMARY KEY,
+	After taking those actions, I recieved the same error.	
+	Relevant Q @
+		https://stackoverflow.com/questions/36368496/pg-copy-error-invalid-input-syntax-for-integer-when-importing-quoted-csv-file
+	Specify the columns... 
+		COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
+
+Issue:
+	Error: varchar size limits! Trying making every varchar 280 chars long (a tweet). Q
+		@ stackoverflow.com/questions/25593338/how-to-import-tables-with-missing-values
+Theory:
+		Try adding an explicit delimiter to my query: maybe it doesn't recognize the columns in my csv, since it doesn't know to split on the ","?
+			COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' WITH DELIMITER ',';
+		I have a space added to my columns in the header
+			ERROR:  invalid input syntax for type integer: " rating"
+			CONTEXT:  COPY agents, line 1, column rating: " rating"
+		--> try eliminating spaces from query?
+Resolution:
+	Sean+Blake suggest CSV HEADER, also using WITH is optional:
+		COPY agents (name,title,rating,recentSales,phone,email,avatar,about,agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' DELIMITER ',' CSV HEADER;
+	the error would make sense if it’s perceiving the csv header as data, i.e. putting the string from the header into the integer field.
+
+Issue:
+	Attempted to run $node seed.psql.js.
+	Got a very long error message: see "error_wed_610pm"
+	"ERROR: must be a superuser or...", for all six tables
+Theory:
+	Add role to the seeder user
+Resolution:
+	Use psql cli ALTER ROLE
+		a) make seeder a superuser? --> go for it
+		b) give seeder limited privilege? --> may be complicated
+	-# ALTER ROLE 
+	--> superuser privilege for seeder got that fixed.
+
+Issue
+	My .json files are a bit messed up; I need each object to have its own key, or for all the objects to be collected in a big array (which would have to be parsed thru by the seeding script).
+Theory
+	a) manually edit the .json files to put the objects into an array. This would mean changing the first and last lines. I would then re-seed mongodb.
+	b) rework the json generation script to put a key on each object, then re-seed.
+Resolution:
+	MongoDB import guide @ https://docs.mongodb.com/guides/server/import/
+	MongoDB reference import data @ https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/inventory.crud.json
+	Added a key "i" to both generators. --> I think this is wrong, based on the reference data. What it looks like I need to do is to drop the header and tail "{", "}". Reference is just a new object on each line.
+	I would like to not regenerate the entire 2 x 10M line json files just because of a couple mustache braces, so I'm looking into using $sed @
+			https://stackoverflow.com/questions/50612417/remove-first-character-of-a-text-file-from-shell
+		Original:	sed '1s/^.//' startfile > endfile # match first line in susbstitution mode, at end of line match any char, replace with nothing
+		Edited: sed '1s/^{//' startfile > endfile # this KILLED my json file, lol
+		New Approach: changed the jsonMaker to ommit head and tail braces, regenerating...
+
+Issue
+	About to try import .json data to mongo db
+	Getting errors
+Theory
+	command @ https://docs.mongodb.com/guides/server/import/
+	default
+		mongoimport --db test --collection inventory \
+	       --authenticationDatabase admin --username <user> --password <password> \
+	       --drop --file ~/Downloads/inventory.crud.json
+  edits
+		mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+	error:
+		> mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		uncaught exception: SyntaxError: unexpected token: identifier :
+		@(shell):1:14
+	Maybe this error is because I need to set up the db and its collections before seeding it? I had assumed that mongo would create them as I go.
+	> use mortgage # created mortgage db
+	> db.createCollection("properties") # created properties collection
+	... try running the command again, as above:
+	Same error!
+	Q @ https://stackoverflow.com/questions/31314544/mongoimport-syntaxerror-unexpected-identifier
+	I need to use the command from bash, not mongo-cli!!!
+	error:
+		{mongo} $mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		2020-12-10T11:41:42.772-0800	connected to: mongodb://localhost/
+		2020-12-10T11:41:42.774-0800	dropping: mortgage.properties
+		2020-12-10T11:41:42.843-0800	Failed: error processing document #2: invalid character ',' looking for beginning of value
+		2020-12-10T11:41:42.843-0800	0 document(s) imported successfully. 0 document(s) failed to import.
+	Commas in between the objects are no good ---> regenerate json!! Work with a smaller document for now.
+	After eliminating commas, reducing count to 10: 10 documents imported successfully!
+	commands:
+		mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		mongoimport --db mortgage --collection agents --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/agents.json
+	Observation:
+		It's a much better idea to try the complete process from generation to seeding before I generate any huge files.
+
 
 
 
