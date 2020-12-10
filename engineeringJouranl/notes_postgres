@@ -16,6 +16,17 @@ change user roles:
 	DROP ROLE uname;
 	ALTER ROLE uname CREATEDB; #let uname make new dbs
 
+modify a table, useful for adding constraints after seeding,
+seeding a table with constraints is slower
+	@ https://www.postgresqltutorial.com/postgresql-foreign-key/
+	ALTER TABLE child_table 
+		ADD CONSTRAINT constraint_name 
+			FOREIGN KEY (fk_columns) 
+				REFERENCES parent_table (parent_key_columns);
+Check that a constraint is valid
+	ALTER TABLE distributors VALIDATE CONSTRAINT distfk;
+	
+
 cli prompts:
 	[state][user]
 	=#	superuser has a #

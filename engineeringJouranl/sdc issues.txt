@@ -129,6 +129,67 @@ Resolution:
 	-# ALTER ROLE 
 	--> superuser privilege for seeder got that fixed.
 
+Issue
+	My .json files are a bit messed up; I need each object to have its own key, or for all the objects to be collected in a big array (which would have to be parsed thru by the seeding script).
+Theory
+	a) manually edit the .json files to put the objects into an array. This would mean changing the first and last lines. I would then re-seed mongodb.
+	b) rework the json generation script to put a key on each object, then re-seed.
+Resolution:
+	MongoDB import guide @ https://docs.mongodb.com/guides/server/import/
+	MongoDB reference import data @ https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/inventory.crud.json
+	Added a key "i" to both generators. --> I think this is wrong, based on the reference data. What it looks like I need to do is to drop the header and tail "{", "}". Reference is just a new object on each line.
+	I would like to not regenerate the entire 2 x 10M line json files just because of a couple mustache braces, so I'm looking into using $sed @
+			https://stackoverflow.com/questions/50612417/remove-first-character-of-a-text-file-from-shell
+		Original:	sed '1s/^.//' startfile > endfile # match first line in susbstitution mode, at end of line match any char, replace with nothing
+		Edited: sed '1s/^{//' startfile > endfile # this KILLED my json file, lol
+		New Approach: changed the jsonMaker to ommit head and tail braces, regenerating...
+
+Issue
+	About to try import .json data to mongo db
+	Getting errors
+Theory
+	command @ https://docs.mongodb.com/guides/server/import/
+	default
+		mongoimport --db test --collection inventory \
+	       --authenticationDatabase admin --username <user> --password <password> \
+	       --drop --file ~/Downloads/inventory.crud.json
+  edits
+		mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+	error:
+		> mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		uncaught exception: SyntaxError: unexpected token: identifier :
+		@(shell):1:14
+	Maybe this error is because I need to set up the db and its collections before seeding it? I had assumed that mongo would create them as I go.
+	> use mortgage # created mortgage db
+	> db.createCollection("properties") # created properties collection
+	... try running the command again, as above:
+	Same error!
+	Q @ https://stackoverflow.com/questions/31314544/mongoimport-syntaxerror-unexpected-identifier
+	I need to use the command from bash, not mongo-cli!!!
+	error:
+		{mongo} $mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		2020-12-10T11:41:42.772-0800	connected to: mongodb://localhost/
+		2020-12-10T11:41:42.774-0800	dropping: mortgage.properties
+		2020-12-10T11:41:42.843-0800	Failed: error processing document #2: invalid character ',' looking for beginning of value
+		2020-12-10T11:41:42.843-0800	0 document(s) imported successfully. 0 document(s) failed to import.
+	Commas in between the objects are no good ---> regenerate json!! Work with a smaller document for now.
+	After eliminating commas, reducing count to 10: 10 documents imported successfully!
+	commands:
+		mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		mongoimport --db mortgage --collection agents --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/agents.json
+	Observation:
+		It's a much better idea to try the complete process from generation to seeding before I generate any huge files.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
