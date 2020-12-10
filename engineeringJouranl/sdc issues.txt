@@ -116,6 +116,19 @@ Resolution:
 		COPY agents (name,title,rating,recentSales,phone,email,avatar,about,agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' DELIMITER ',' CSV HEADER;
 	the error would make sense if it’s perceiving the csv header as data, i.e. putting the string from the header into the integer field.
 
+Issue:
+	Attempted to run $node seed.psql.js.
+	Got a very long error message: see "error_wed_610pm"
+	"ERROR: must be a superuser or...", for all six tables
+Theory:
+	Add role to the seeder user
+Resolution:
+	Use psql cli ALTER ROLE
+		a) make seeder a superuser? --> go for it
+		b) give seeder limited privilege? --> may be complicated
+	-# ALTER ROLE 
+	--> superuser privilege for seeder got that fixed.
+
 
 
 

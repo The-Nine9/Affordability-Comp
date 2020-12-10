@@ -16,27 +16,40 @@ SDC Timeline
 ### More Detail
 
 [ X ] Select app and services
+
 [ X ] Update the API to be fully CRUD capable
 	[ X ] Create a CRUD api to support the existing codebase 
 	[ X ] Update API with schema changes
+
 [ X ] Choose 2 databases, and build out the schema for each of them
 	[ X ] PostgresSQL
 	[ X ] MongoDB
 	[ X ] API + Schema approved by Susan
+
 [ X ] Install PostgresSQL
 	[ X ] Notes on basic commands are in hackreactor/sdc/notes_postgress
-[ ⅓ ] Generate 10m records and efficiently load into each db
+
+[ * ] Generate 10m records and efficiently load into each db
 	[ X ] Generate csv for postgres
 	[ X ] Write csv header
-	[ X ] Write dummy data to loop thru
+	[ X ] Write dummy data to loop thru (generator functions --> strings)
 	[ X ] Use fs to write .csv files 
 	[ X ] Generate JSON for mongo
 	[   ] Use .csv files to seed postgres
+		[ X ] Add .csv data to a postgres table from the psql-cli
+		[ * ] Write a script to seed postgres
+			[  ] Connect the script to the db
+			[  ] Write each COPY query, return them from getQueryToCopy()
 	[   ] Write a script to add constraints to postgres, run after seeding
 	[   ] Use .json files to seed mongo
 
 
-[  ] Seed sql
+
+
+
+
+
+
 
 
 
