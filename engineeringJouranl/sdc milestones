@@ -1,3 +1,11 @@
+Legend
+	[   ]	Task
+	[ X ] Completed task
+	[ * ] In-progess task
+	[ ? ] Task awaits answer
+	(   ) Option
+	( X ) Chosen option
+
 SDC Timeline
 
 ### High-Level
@@ -5,8 +13,8 @@ SDC Timeline
 [ X ] Select app and services
 [ X ] Update the API to be fully CRUD capable
 [ X ] Choose 2 databases you haven’t used already (one SQL, one no-SQL)
-[ * ] Generate 10m records and efficiently load into each database (db)
-[   ] Performance tune and benchmark test the queries for 2 db options 
+[ X ] Generate 10m records and efficiently load into each database (db)
+[ * ] Performance tune and benchmark test the queries for 2 db options 
 [   ] Choose one db to move forward with
 [   ] Stress test in development env. and report metrics from New Relic dashboard
 [   ] Deploy to AWS
@@ -35,15 +43,22 @@ SDC Timeline
 	[ X ] Write dummy data to loop thru (generator functions --> strings)
 	[ X ] Use fs to write .csv files 
 	[ X ] Generate JSON for mongo
-	[   ] Use .csv files to seed postgres
+	[ X ] Use .csv files to seed postgres
 		[ X ] Add .csv data to a postgres table from the psql-cli
-		[ * ] Write a script to seed postgres
-			[  ] Connect the script to the db
-			[  ] Write each COPY query, return them from getQueryToCopy()
-	[   ] Write a script to add constraints to postgres, run after seeding
-	[   ] Use .json files to seed mongo
+		[ X ] Write a script to seed postgres
+			[ X ] Connect the script to the db
+			[ X ] Write each COPY query
+	[ X ] Use .json files to seed mongo
+		[ X ] Seeded small amounts of data
+		[ X ] Seed the full 2x 10M dataset
+		[ ? ] Refactor the data's absolute path names to relative path names
+	[ * ] Write a script to add constraints to postgres, run after seeding
 
-
+[   ] Performance tune and benchmark test the queries for 2 db options 
+	[   ] Write all queries uses by the API
+	[   ] Verify that all queries run in under 50ms
+					[ ] Write timing tests, OR [ ] DB console timing
+	[   ] 
 
 
 
