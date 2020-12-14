@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb://localhost/sdcMortgages");
+mongoose.connect("mongodb://localhost/mortgage");
+const db = mongoose.connection;
 
 const Property = mongoose.model("Property", new mongoose.Schema({
   "property_id": Number,

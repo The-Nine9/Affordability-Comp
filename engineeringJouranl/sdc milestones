@@ -20,6 +20,7 @@ SDC Timeline
 [   ] Deploy to AWS
 [   ] Stress test deployed service and report metrics from New Relic dashboard
 [   ] Attempt to scale to 10k rps
+End: Friday 18
 
 ### More Detail
 
@@ -52,13 +53,38 @@ SDC Timeline
 		[ X ] Seeded small amounts of data
 		[ X ] Seed the full 2x 10M dataset
 		[ ? ] Refactor the data's absolute path names to relative path names
-	[ * ] Write a script to add constraints to postgres, run after seeding
 
-[   ] Performance tune and benchmark test the queries for 2 db options 
-	[   ] Write all queries uses by the API
-	[   ] Verify that all queries run in under 50ms
-					[ ] Write timing tests, OR [ ] DB console timing
-	[   ] 
+[ * ] Performance tune and benchmark test the queries for 2 db options 
+	[ * ] Write all queries used by the API for mongo + postgres
+		[ X ] Test mongo queries on cli
+		[  ] Test psql queries on cli
+	[   ] Measure query times
+			( _ ) Write timing tests, OR ( ^ ) DB console timing (=# ANALYZE EXPLAIN, > {query} .getExtra() )
+			[   ] Alter the tables with index for BFS search, add foreign keys
+			[   ] Verify that all queries run in under 50ms
+  [   ] Choose one db to move forward with
+  	[   ] Implement server endpoints to query that db
+  [   ] Midpoint Conversation Video
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
