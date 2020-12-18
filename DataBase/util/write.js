@@ -12,7 +12,9 @@ function writeAnyTimes(
   callback, // i only use this callback to console log that it's done
   tail=null, // string, end of document
   ) {
-  writer.write(header, encoding);
+  if (header) {
+    writer.write(header, encoding);
+  }
   let i = times;
   write();
   function write() {

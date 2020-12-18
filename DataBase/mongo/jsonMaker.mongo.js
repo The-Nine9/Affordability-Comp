@@ -9,10 +9,10 @@ const tenThousand = 10000;
 
 const datadir = Path.join(__dirname, "data");
 
-const {Property, Agent} = require("./schema.mongo.js");
+const { Property, Agent } = require("./schema.mongo.js");
 
-const header = "{";
-const tail = "}";
+const header = null;
+const tail = null;
 
 module.exports.properties = () => {
   const getAgents = () => {
@@ -60,7 +60,7 @@ module.exports.properties = () => {
     }
   };
   const generator = (i) => {
-    let terminator = (i > 0) ? ",\n" : "\n";
+    let terminator = "\n"; //(i > 0) ? ",\n" : "\n";
     return JSON.stringify({
       "property_id": i,
       "price": faker.random.number({min: 10*tenThousand, max: 2*tenMillion}),
@@ -76,7 +76,7 @@ module.exports.properties = () => {
     fs.createWriteStream(Path.join(datadir, "properties.json")),
     header,
     generator,
-    tenThousand,
+    tenMillion,
     "utf8",
     () => {console.log("properties.json ---> completed")},
     tail
@@ -112,7 +112,7 @@ module.exports.agents = () => {
     return appointments;
   };
   const generator = (i) => {
-    let terminator = (i > 0) ? ",\n" : "\n";
+    let terminator = "\n"; //(i > 0) ? ",\n" : "\n";
     return JSON.stringify({
       "agent_id": faker.random.number({min: 1, max: tenMillion}),
       "name": faker.name.findName(),
@@ -132,7 +132,7 @@ module.exports.agents = () => {
     fs.createWriteStream(Path.join(datadir, "agents.json")),
     header,
     generator,
-    tenThousand,
+    tenMillion,
     "utf8",
     () => {console.log("agents.json ---> completed")},
     tail
@@ -143,3 +143,5 @@ module.exports.main = () => {
   module.exports.properties();
   module.exports.agents();
 };
+
+// module.exports.main();

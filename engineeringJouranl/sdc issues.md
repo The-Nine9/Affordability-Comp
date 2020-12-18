@@ -129,6 +129,90 @@ Resolution:
 	-# ALTER ROLE 
 	--> superuser privilege for seeder got that fixed.
 
+Issue
+	My .json files are a bit messed up; I need each object to have its own key, or for all the objects to be collected in a big array (which would have to be parsed thru by the seeding script).
+Theory
+	a) manually edit the .json files to put the objects into an array. This would mean changing the first and last lines. I would then re-seed mongodb.
+	b) rework the json generation script to put a key on each object, then re-seed.
+Resolution:
+	MongoDB import guide @ https://docs.mongodb.com/guides/server/import/
+	MongoDB reference import data @ https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/inventory.crud.json
+	Added a key "i" to both generators. --> I think this is wrong, based on the reference data. What it looks like I need to do is to drop the header and tail "{", "}". Reference is just a new object on each line.
+	I would like to not regenerate the entire 2 x 10M line json files just because of a couple mustache braces, so I'm looking into using $sed @
+			https://stackoverflow.com/questions/50612417/remove-first-character-of-a-text-file-from-shell
+		Original:	sed '1s/^.//' startfile > endfile # match first line in susbstitution mode, at end of line match any char, replace with nothing
+		Edited: sed '1s/^{//' startfile > endfile # this KILLED my json file, lol
+		New Approach: changed the jsonMaker to ommit head and tail braces, regenerating...
+
+Issue
+	About to try import .json data to mongo db
+	Getting errors
+Theory
+	command @ https://docs.mongodb.com/guides/server/import/
+	default
+		mongoimport --db test --collection inventory \
+	       --authenticationDatabase admin --username <user> --password <password> \
+	       --drop --file ~/Downloads/inventory.crud.json
+  edits
+		mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+	error:
+		> mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		uncaught exception: SyntaxError: unexpected token: identifier :
+		@(shell):1:14
+	Maybe this error is because I need to set up the db and its collections before seeding it? I had assumed that mongo would create them as I go.
+	> use mortgage # created mortgage db
+	> db.createCollection("properties") # created properties collection
+	... try running the command again, as above:
+	Same error!
+	Q @ https://stackoverflow.com/questions/31314544/mongoimport-syntaxerror-unexpected-identifier
+	I need to use the command from bash, not mongo-cli!!!
+	error:
+		{mongo} $mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		2020-12-10T11:41:42.772-0800	connected to: mongodb://localhost/
+		2020-12-10T11:41:42.774-0800	dropping: mortgage.properties
+		2020-12-10T11:41:42.843-0800	Failed: error processing document #2: invalid character ',' looking for beginning of value
+		2020-12-10T11:41:42.843-0800	0 document(s) imported successfully. 0 document(s) failed to import.
+	Commas in between the objects are no good ---> regenerate json!! Work with a smaller document for now.
+	After eliminating commas, reducing count to 10: 10 documents imported successfully!
+	commands:
+		mongoimport --db mortgage --collection properties --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/properties.json
+		mongoimport --db mortgage --collection agents --drop --file /Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/mongo/data/agents.json
+	Observation:
+		It's a much better idea to try the complete process from generation to seeding before I generate any huge files.
+
+Issue
+	Attempting to run my constraint script on postgres, I encountered the error in error_thur350pm
+
+Issue
+	Attempting to use GET "/mortgageAPI/agent/:name", and I get this error:
+		CastError: Cast to string failed for value "{ name: 'Mack Bradtke' }" at path "name" for model "Agent"
+	In server/index.js, I am passing the req paramater "Mack%20Bradtke" and using String.prototype.replace() to interpolate the whitespace.
+  The value which is arriving at DataBase/mongo/controllers/agent.js is an Object, and not a string.
+		In agent.js: name is [object Object] <object>
+		stringified name: {"name":"Mack Bradtke"}
+Resolution:
+	From server/index.js, I was erronously passing the name inside of an anonymous object literal.
+
+Issue
+	In writing queries to mongo-cli, I want to create a document that has an array of foreign keys. And, if any of the keys in that array don’t match to a document in their particular collection, I want to insert a document in there.
+	5:09
+	Here’s my pseudocode of how I see this working:
+		POST
+			Receive all data for a property + any associated agents
+			Create the property document
+			Find any existing agents who match those in the post
+			Create any agents who are not in the post
+			Associate the property with the agents
+	POST because there would ultimately be a server endpoint to access these queries… for now, I’d like to get one on the mongo cli
+	5:10
+	I would be expecting to receive a request body with json for the property including an array of its associated agents, as well as json for any new agents who are associated with this new property (i.e., the agents in the property array may or may not exist in the agents collection at the time of the query) (edited) 
+
+
+
+
+
+
+
 
 
 
