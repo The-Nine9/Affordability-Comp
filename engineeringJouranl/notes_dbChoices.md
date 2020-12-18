@@ -33,6 +33,7 @@ Scaling the DB:
 Vertical Scaling			Making the machine badder
 Horizontal Scaling		Adding more machines
 
+Mongo supports horizontal scaling through Sharding @ https://docs.mongodb.com/manual/sharding/
 
 
 

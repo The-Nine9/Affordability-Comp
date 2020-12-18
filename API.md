@@ -1,5 +1,44 @@
 # Server API
 
+## ENDPOINTS REFERENCE
+### Primary Queries
+  * POST "/mortageAPI/main"
+  * GET "/mortageAPI/main"
+### Secondary Queries (not required)
+  * POST "/mortgageAPI/property"
+  * GET "/mortgageAPI/property/:id"
+  * PATCH "/mortgageAPI/property/:id"
+  * DELETE "/mortgageAPI/property/:id"
+  * POST "/mortgageAPI/agent/:id"
+  * GET "/mortgageAPI/agent/:id"
+  * PATCH "/mortgageAPI/agent/:id"
+  * DELETE "/mortgageAPI/agent/:id"
+  * POST "/mortgageAPI/agent/:agent_id/property/:property_id"
+  * DELETE "/mortgageAPI/agent/:agent_id/property/:property_id"
+  * POST "/mortgageAPI/agent/:id/appointment"
+  * PATCH "/mortgageAPI/agent/:id/appointment"
+  * DELETE "/mortgageAPI/agent/:id/appointment/:client"
+
+## PRIMARY QUERIES
+
+### Create a property, Create agents associated with it, associate existing agents to it.
+  * POST "/mortageAPI/main"
+**Success Status Code:** "201"
+**Request Body:** json with keys...
+```json
+    {
+      "property": {
+        Property Object, less property_id
+      },
+      "agents": {
+        "new": [{Agent Objects, less agent_id}],
+        "existing" [Number]:
+      }
+    }
+```
+
+
+
 ## PROPERTIES
 
 ### Create a Property
@@ -8,13 +47,16 @@
 **Request Body:** json with keys...
 ```json
     {
+      "property_id": Number,
       "price": Number,
       "beds": Number,
       "baths": Number,
+      "address": String,
       "hoa": {
         "name": String,
         "fee": Number
       },
+      "agents": [Number], // 2-way embeddeing, with ids as foreign keys
       "appointments": [{
         "appointment_id": Number,
         "contactAgent": {
@@ -71,7 +113,7 @@
 ```
 
 ### Update a property
-  * PATCH "/mortgageAPI/listing/:id"
+  * PATCH "/mortgageAPI/property/:id"
 **Path Parameters:**
   * "id" property listing`s id
 **Success Status Code:** "204"
@@ -106,7 +148,7 @@
 ```
 
 ### Delete property listing
-  * DELETE "/mortgageAPI/listing/:id"
+  * DELETE "/mortgageAPI/property/:id"
 **Path Paramaters:**
   * "id" property listing"s id
 **Success Status Code:** "204"
@@ -114,9 +156,9 @@
 ## AGENTS
 
 ### Create an agent
-  * POST "/api/agent/:name"
+  * POST "/mortgageAPI/agent/:id"
 **Path Paramaters:**
-  * "name" the agent's name
+  * "id"  the agent's id
 **Success Status Code:** "201"
 **Request Body**: Expects JSON with the following keys.
 ```json
@@ -134,9 +176,9 @@
 ```
 
 ### Read all data about an agent
-  * GET "/mortgageAPI/agent/:name"
+  * GET "/mortgageAPI/agent/:id"
 **Path Paramaters**
-  * "name" the agent's name
+  * "id"  the agent's id
 **Returns** json
 ```json
     {
@@ -166,9 +208,9 @@
 ```
 
 ### Update the data about an agent
-  * PATCH "/mortgageAPI/agent/:name"
+  * PATCH "/mortgageAPI/agent/:id"
 **Path Parameters:**
-  * "name" the agent's name
+  * "id"  the agent's id
 **Success Status Code:** "204"
 **Request Body**: Expects JSON with any of the following keys (include only keys to be updated)
 ```json
@@ -187,23 +229,32 @@
 ```
 
 ### Delete an agent
-  * DELETE "/mortgageAPI/agent/:name"
+  * DELETE "/mortgageAPI/agent/:id"
 **Route Paramaters:**
-  * "name" the agent's name
+  * "id"  the agent's id
 **Success Status Code:** "204"
 
 ### Associate an agent with a property listing
-  * POST "/mortgageAPI/agent/:name/property/:address"
+  * POST "/mortgageAPI/agent/:agent_id/property/:property_id"
 **Route Paramaters:**
-  * "name" the agent's name
-**Success Status Code:** 201
+  * "agent_id", number
+  * "property_id", number
+**Success Status Code:** "201"
+
+### Disaassociate an agent from a property listing
+  * DELETE "/mortgageAPI/agent/:agent_id/property/:property_id"
+**Route Paramaters:**
+  * "agent_id", number
+  * "property_id", number
+**Success Status Code:** "204"
+
 
 ## APPOINTMENTS
 
 ### Book an appointment for an agent
-  * POST "/mortgageAPI/agent/:name/appointment"
+  * POST "/mortgageAPI/agent/:id/appointment"
 **Route Paramaters:**
-  * "name" the agent's name
+  * "id"  the agent's id
 **Success Status Code:** "201"
 **Request Body:** Expects JSON with the following keys:
 ```json
@@ -217,17 +268,20 @@
       "name": String,
       "phone": String,
       "email": String
-    }
+    },
+    "date": Date,
+    "inPerson": Boolean,
+    "zoom":  String,
   }
 ```
 
 ### Update an appointment for an agent
-  * PATCH "/mortgageAPI/agent/:name/appointment"
+  * PATCH "/mortgageAPI/agent/:agent_id/appointment/:appointment_id"
 **Route Paramaters:**
-  * "name" the agent's name
+  * "agent_id" number
+  * "appointment_id" number
 **Success Status Code:** "204"
 **Request Body**: Expects JSON with any of the following keys (include only keys to be updated)
-
 ```json
   {
     "contactAgent": {
@@ -244,8 +298,8 @@
 ```
 
 ### Delete an appointment for an agent
-  * DELETE "/mortgageAPI/agent/:name/appointment/:client"
+  * DELETE "/mortgageAPI/agent/:id/appointment/:client"
 **Route Paramaters:**
-  * "name" the agent's name
+  * "id"  the agent's id
   * "client" the name of the client who's appointment will be deleted
 **Success Status Code:** "204"

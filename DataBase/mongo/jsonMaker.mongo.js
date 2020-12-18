@@ -9,7 +9,7 @@ const tenThousand = 10000;
 
 const datadir = Path.join(__dirname, "data");
 
-const {Property, Agent} = require("./schema.mongo.js");
+const { Property, Agent } = require("./schema.mongo.js");
 
 const header = null;
 const tail = null;
