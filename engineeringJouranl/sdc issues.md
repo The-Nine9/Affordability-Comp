@@ -180,9 +180,32 @@ Theory
 	Observation:
 		It's a much better idea to try the complete process from generation to seeding before I generate any huge files.
 
+Issue
+	Attempting to run my constraint script on postgres, I encountered the error in error_thur350pm
 
+Issue
+	Attempting to use GET "/mortgageAPI/agent/:name", and I get this error:
+		CastError: Cast to string failed for value "{ name: 'Mack Bradtke' }" at path "name" for model "Agent"
+	In server/index.js, I am passing the req paramater "Mack%20Bradtke" and using String.prototype.replace() to interpolate the whitespace.
+  The value which is arriving at DataBase/mongo/controllers/agent.js is an Object, and not a string.
+		In agent.js: name is [object Object] <object>
+		stringified name: {"name":"Mack Bradtke"}
+Resolution:
+	From server/index.js, I was erronously passing the name inside of an anonymous object literal.
 
-
+Issue
+	In writing queries to mongo-cli, I want to create a document that has an array of foreign keys. And, if any of the keys in that array don’t match to a document in their particular collection, I want to insert a document in there.
+	5:09
+	Here’s my pseudocode of how I see this working:
+		POST
+			Receive all data for a property + any associated agents
+			Create the property document
+			Find any existing agents who match those in the post
+			Create any agents who are not in the post
+			Associate the property with the agents
+	POST because there would ultimately be a server endpoint to access these queries… for now, I’d like to get one on the mongo cli
+	5:10
+	I would be expecting to receive a request body with json for the property including an array of its associated agents, as well as json for any new agents who are associated with this new property (i.e., the agents in the property array may or may not exist in the agents collection at the time of the query) (edited) 
 
 
 

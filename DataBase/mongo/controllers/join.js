@@ -2,6 +2,58 @@ const mongoose = require("mongoose");
 
 const { Agent, Property } = require("../schema.mongo.js");
 
+module.exports.createAll = async(property, agents, callback) => {
+  let err = null;
+  let doc;
+  try {
+    // Create each of the new agents + associate them
+    agents.forEach(agent => {
+      doc = new Agent(agent);
+      doc.properties.push(property.property_id);
+      if (!property.agents.includes(doc.agent_id)) {
+        // db.agents.find({}).sort({agent_id: -1}).limit(1);
+      }
+      await doc.save();
+    });
+    // Create the new property
+    doc = new Property(property);
+    await doc.save();
+    // Associate old agents with the property
+
+  } catch(e) {
+    let err = e;
+  } finally {
+    callback(err);
+  }
+};
+
+module.exports.readAll = async (property_id, callback) => {
+  let property;
+  let agents;
+  let err = null;
+  try {
+    property = await Property.read(property_id);
+    if (property.agents.length) {
+      property.agents.forEach(agent_id => {
+        agent = await Agent.findOne({"agent_id": agent_id});
+        agents.push(agent);
+      });
+    }
+  } catch(e) {
+    err = e;
+  } finally {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, {
+        "property": property,
+        "agents": agents
+      });
+    }
+  }
+};
+
+
 module.exports.create = async (agent_id, property_id, callback) => {
   // Search properties by id
   // Search agents by id

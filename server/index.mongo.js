@@ -20,6 +20,18 @@ const errorMessage = (method, err, docs) => {
   return res;
 }
 
+app.route("/mortageAPI/main")
+  .post((req, res) => {
+    Join.createAll(req.body.property, req.body.agents, (err, docs) => {
+
+    });
+  })
+  .get((req, res) => {
+    Join.readAll(req.body.property_id, (err, docs) => {
+
+    })
+  });
+
 app.route("/mortgageAPI/property/:id")
   .post((req, res) => {
     Property.create(req.body.data, (err, docs) => {
