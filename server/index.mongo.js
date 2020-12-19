@@ -20,10 +20,14 @@ const errorMessage = (method, err, docs) => {
   return res;
 };
 
-app.route("/mortgageAPI/main/:property_id")
+app.route("/mortgageAPI/main/:property_id?")
   .post((req, res) => {
     Join.createAll(req.body.property, req.body.agents, (err, docs) => {
-
+      if (err) {
+        res.status(500).send(errorMessage("post", err, docs));
+      } else {
+        res.status(201).send("successfully created both a property and its associated agents");
+      }
     });
   })
   .get((req, res) => {
