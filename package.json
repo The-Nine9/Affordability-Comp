@@ -6,7 +6,7 @@
     "react-dev": "webpack -d --watch",
     "production": "webpack",
     "test": "jest",
-    "start:mongo": "nodemon server/index.mongo.js",
+    "start": "nodemon server/index.mongo.js",
     "seed": "node seed",
     "login": "sh aws/login.sh",
     "scp:json": "sh aws/scp.json.sh"
