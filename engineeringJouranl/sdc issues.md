@@ -1,97 +1,97 @@
-Issue:
+##Issue
 	Fully understand the existing DB and its API
-Theory:
+###Theory:
 	It very likely doesn't have that much
 	Q: Only collection is for prices? What about agents + schedules schemas? they're unused schemas?
-Resolution:
+###Resolution:
 	dev mode for webpack
 	server/index.js lines about brotlicompression
 
-Issue
+##Issue
 	attempting to run npm start, and i get "sh: nodemon: command not found"
-Theory
+###Theory
 	nodemon is not listed as a dependency in package.json
-Resolution
+###Resolution
 	installed nodemon --> Listening on 
 
-Issue
+##Issue
 	attempting to run npm react-dev, error Algorithm "brotliCompress" is not found in "zlib"
-Theory
+###Theory
 	I need to install additional compression libraries
-Resolution?
+###Resolution?
 	Q for Blake?
 
-Issue
+##Issue
 	there is no apparent endpoint which would access the getAll() method from mongoCont, but the perteinent test passes anyways.
-Theory
+###Theory
 	I haven't found the endpoint yet
-Resolution
+###Resolution
 
-Issue
+##Issue
 	I downloaded + installed postgres from the webstie, but couldn't use common cli commands. I then downloaded postgress with brew, and installed with brew. Now I have the ability to run posgress cli commands, but on attempting to start the postgress service, I am getting an error message that the port is in use by another "postmaster" - the port number 5432 indicates to me that the new, homebrew-installed postgress service is conflicting with the original installation.
-Theory
+###Theory
   I need to kill the existing postgres service.
 Actions
 	I did sudo rm -r on the postgres directory in /Library.
 Result
 	It looks like deleting that directory has allowed me to beign postgres with the postgres-init command I added to my bashrc. I'm going to continue working thru the tutorial @ https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
 
-Issue
+##Issue
   The data in my csv appears backwards
-Resolution
+###Resolution
   Refactoring writeStrings() from a do-while to a for loop fixed this.
 
-Issue
+##Issue
 	The null values for HOA keys aren't printing
-Resolution
+###Resolution
 	Switched from using null to represent no HOA, to using -1.
 
-Issue
+##Issue
 	After running my properties() csv generation function, I got an error message about the JS heap running out of memory; see "sand/sed error 545am". Running the script with 1/100th the amount of records attempted resulted in success.
-Theory
+###Theory
 	I am attempting to do so much computing work, that my system can't handle it.
 	I could increase the memory limit. 1.7GB standard?
 	@ https://stackoverflow.com/questions/38558989/node-js-heap-out-of-memory
   Set node environment variable
   $ node --max-old-space-size=4096 yourFile.js // this is 4gb, and was not enough
   $ node --max-old-space-size=7168 yourFile.js // try 7gb, still ran out
-Resolution
+###Resolution
 	Signifigant refactoring with the team! 
 
-Issue
+##Issue
 	DataBase/psql/csvMaker.psql.js does not appear in git, at all!
-Theory
+###Theory
 	It has been gitignored somehow (negative!)
-Resolution
+###Resolution
 	An attempt to get the file un-ignored by renmaing it revealed that git was tracking it, as it was recognized as a "deleted" file.
 	I must have already commited all the recent changes? It's possible. I haven't been working on it for a while. ---> confirmed this by trying chaning a comment. It's up-to-date!
 
-Issue
+##Issue
 	Some of my .csv files include the delimmitter character ","
-Theory
+###Theory
 	I can write a helper function to eliminate commas from strings
-Resolution?
+###Resolution?
 	I the helper function and attached it to to strings generated in my csv generator. It's cooking files now, we'll see if I get any errors when I go to copy csvs over into the db.
 
-Issue
+##Issue
 	Seeding my postgress db with my .csv files
-Theory
+###Theory
 	Either (a) seed with a script, or (b) use a psql-cli command
-Resolution?
+###Resolution?
 	Try (b) ---> @ https://www.postgresql.org/docs/9.2/sql-copy.html
 	=> COPY table_name [column name, column name]
 			FROM 
 
-Issue:
+##Issue
 	When copying from csv into my postgres db from the psql-cli, I encountered this data type error:
 		mortgage=# COPY agents FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
 		ERROR:  invalid input syntax for type integer: "name, title, rating, recentSales, phone, email, avatar, about, agency"
 		CONTEXT:  COPY agents, line 1, column agent_id: "name, title, rating, recentSales, phone, email, avatar, about, agency"
-	This looks like and issue with the agent_id field not auto-incrementing as I thought it would; notice that I do not insert on that field.
-Theory
+	This looks like and ##Issue with the agent_id field not auto-incrementing as I thought it would; notice that I do not insert on that field.
+###Theory
 	a) modify my csv generators to insert on the id fields
 	b) modify my psql schema to work the way I originally wanted it to
-Resolution?
+###Resolution?
 	Got an answer from Blake; persuing route (b) by modifying primary key declarations
 		Wrong: client_id SERIAL NOT NULL, PRIMARY KEY(client_id),
 		Right: client_id SERIAL PRIMARY KEY,
@@ -101,40 +101,40 @@ Resolution?
 	Specify the columns... 
 		COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv';
 
-Issue:
+##Issue
 	Error: varchar size limits! Trying making every varchar 280 chars long (a tweet). Q
 		@ stackoverflow.com/questions/25593338/how-to-import-tables-with-missing-values
-Theory:
+###Theory:
 		Try adding an explicit delimiter to my query: maybe it doesn't recognize the columns in my csv, since it doesn't know to split on the ","?
 			COPY agents (name, title, rating, recentSales, phone, email, avatar, about, agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' WITH DELIMITER ',';
 		I have a space added to my columns in the header
 			ERROR:  invalid input syntax for type integer: " rating"
 			CONTEXT:  COPY agents, line 1, column rating: " rating"
 		--> try eliminating spaces from query?
-Resolution:
+###Resolution:
 	Sean+Blake suggest CSV HEADER, also using WITH is optional:
 		COPY agents (name,title,rating,recentSales,phone,email,avatar,about,agency) FROM '/Users/thomasbrannan/Desktop/hackReactor/SDC/Affordability-Comp/DataBase/psql/data/agents.csv' DELIMITER ',' CSV HEADER;
 	the error would make sense if it’s perceiving the csv header as data, i.e. putting the string from the header into the integer field.
 
-Issue:
+##Issue
 	Attempted to run $node seed.psql.js.
 	Got a very long error message: see "error_wed_610pm"
 	"ERROR: must be a superuser or...", for all six tables
-Theory:
+###Theory:
 	Add role to the seeder user
-Resolution:
+###Resolution:
 	Use psql cli ALTER ROLE
 		a) make seeder a superuser? --> go for it
 		b) give seeder limited privilege? --> may be complicated
 	-# ALTER ROLE 
 	--> superuser privilege for seeder got that fixed.
 
-Issue
+##Issue
 	My .json files are a bit messed up; I need each object to have its own key, or for all the objects to be collected in a big array (which would have to be parsed thru by the seeding script).
-Theory
+###Theory
 	a) manually edit the .json files to put the objects into an array. This would mean changing the first and last lines. I would then re-seed mongodb.
 	b) rework the json generation script to put a key on each object, then re-seed.
-Resolution:
+###Resolution:
 	MongoDB import guide @ https://docs.mongodb.com/guides/server/import/
 	MongoDB reference import data @ https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/inventory.crud.json
 	Added a key "i" to both generators. --> I think this is wrong, based on the reference data. What it looks like I need to do is to drop the header and tail "{", "}". Reference is just a new object on each line.
@@ -144,10 +144,10 @@ Resolution:
 		Edited: sed '1s/^{//' startfile > endfile # this KILLED my json file, lol
 		New Approach: changed the jsonMaker to ommit head and tail braces, regenerating...
 
-Issue
+##Issue
 	About to try import .json data to mongo db
 	Getting errors
-Theory
+###Theory
 	command @ https://docs.mongodb.com/guides/server/import/
 	default
 		mongoimport --db test --collection inventory \
@@ -180,20 +180,20 @@ Theory
 	Observation:
 		It's a much better idea to try the complete process from generation to seeding before I generate any huge files.
 
-Issue
+##Issue
 	Attempting to run my constraint script on postgres, I encountered the error in error_thur350pm
 
-Issue
+##Issue
 	Attempting to use GET "/mortgageAPI/agent/:name", and I get this error:
 		CastError: Cast to string failed for value "{ name: 'Mack Bradtke' }" at path "name" for model "Agent"
 	In server/index.js, I am passing the req paramater "Mack%20Bradtke" and using String.prototype.replace() to interpolate the whitespace.
   The value which is arriving at DataBase/mongo/controllers/agent.js is an Object, and not a string.
 		In agent.js: name is [object Object] <object>
 		stringified name: {"name":"Mack Bradtke"}
-Resolution:
+###Resolution:
 	From server/index.js, I was erronously passing the name inside of an anonymous object literal.
 
-Issue
+##Issue
 	In writing queries to mongo-cli, I want to create a document that has an array of foreign keys. And, if any of the keys in that array don’t match to a document in their particular collection, I want to insert a document in there.
 	5:09
 	Here’s my pseudocode of how I see this working:
@@ -207,8 +207,26 @@ Issue
 	5:10
 	I would be expecting to receive a request body with json for the property including an array of its associated agents, as well as json for any new agents who are associated with this new property (i.e., the agents in the property array may or may not exist in the agents collection at the time of the query) (edited) 
 
-
-
+##Issue
+	Incomplete response from GET "/mortgageAPI/main/:property_id"
+	What I want: json with keys property--><Object> and agents---><Array of Objects>
+	What I get: property object is ok, but the agents array is empty
+###Theory
+	...The endpoint routes to DataBase/mongo/controllers/join.js::readAll(). Console logging from readAll, I can see an agent object in the agents array at the time it is pushed to the array. Attempting to console log the agents array right before the callback should send it back to server/index.js results in the server hanging up.
+	...This may be related to the use of awaiting an anonymous, asynchronous callback argument passed to Array.prototype.forEach, used to recieve agent IDs from the property object, to use those IDs to query the Agents collection in mongoDB, and push the resulting docs to the agents array.
+	...A relevant stacoverflow @
+		https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
+	This may be related to those Unhandled Promise Rejections...
+###A&R
+	My original forEach loop did not resolve promises
+  	property.agents.forEach(async function(agent_id) {
+  	  agent = await Agent.findOne({agent_id});
+  	  agents.push(agent);
+  	});
+  I refactored according to the stackoverflow, await Promise.all:
+    agents = await Promise.all(property.agents.map(async (agent_id) => {
+      return await Agent.findOne({agent_id});
+    }));
 
 
 

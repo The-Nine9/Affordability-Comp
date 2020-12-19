@@ -6,20 +6,26 @@ module.exports.createAll = async(property, agents, callback) => {
   let err = null;
   let doc;
   try {
-    // Create each of the new agents + associate them
-    agents.forEach(agent => {
-      doc = new Agent(agent);
-      doc.properties.push(property.property_id);
-      if (!property.agents.includes(doc.agent_id)) {
-        // db.agents.find({}).sort({agent_id: -1}).limit(1);
-      }
-      await doc.save();
-    });
-    // Create the new property
-    doc = new Property(property);
-    await doc.save();
-    // Associate old agents with the property
-
+    // aquire property_id
+    // check property for any existing agents:
+    //  go thru the db and update those agents with property_id
+    // for every new agent in the $agents paramater:
+    //  aquire agent_id
+    //  add the new agent_id to the agents array in $property paramater
+    //  create a new agent doc
+    //  accumulate the new doc to an array
+    // save() the new agents array to the db
+    doc = await Property.find({}).sort({property_id: -1}).limit(1);
+    property.property_id = doc[0].property_id + 1;
+    console.log(">>>property.property_id:\n",property.property_id);
+    console.log(">>>property.agents:\n",property.agents);
+    if (property.agents.length) {
+      console.log(">>>about to update...\n");
+      await Agent.updateMany(
+        { agent_id: { $in: property.agents } }, // filter
+        { $addToSet: { properties: property.property_id } } // doc
+      );
+    }
   } catch(e) {
     let err = e;
   } finally {
@@ -29,15 +35,14 @@ module.exports.createAll = async(property, agents, callback) => {
 
 module.exports.readAll = async (property_id, callback) => {
   let property;
-  let agents;
+  let agents = [];
   let err = null;
   try {
-    property = await Property.read(property_id);
+    property = await Property.findOne({property_id});
     if (property.agents.length) {
-      property.agents.forEach(agent_id => {
-        agent = await Agent.findOne({"agent_id": agent_id});
-        agents.push(agent);
-      });
+      agents = await Promise.all(property.agents.map(async (agent_id) => {
+        return await Agent.findOne({agent_id});
+      }));
     }
   } catch(e) {
     err = e;
@@ -45,10 +50,11 @@ module.exports.readAll = async (property_id, callback) => {
     if (err) {
       callback(err, null);
     } else {
-      callback(null, {
+      let res = {
         "property": property,
         "agents": agents
-      });
+      };
+      callback(null, res);
     }
   }
 };
