@@ -27,6 +27,12 @@ Check that a constraint is valid
 	ALTER TABLE distributors VALIDATE CONSTRAINT distfk;
 	
 
+add an index (basic) @ https://www.postgresql.org/docs/9.1/sql-createindex.html
+ CREATE UNIQUE INDEX title_idx ON films (title);
+
+check size of a db (including indicies) @ https://www.a2hosting.com/kb/developer-corner/postgresql/determining-the-size-of-postgresql-databases-and-tables
+  SELECT pg_size_pretty( pg_database_size('dbname') );
+
 cli prompts:
 	[state][user]
 	=#	superuser has a #
