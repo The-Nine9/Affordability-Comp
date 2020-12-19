@@ -18,17 +18,21 @@ const errorMessage = (method, err, docs) => {
   res += docs + "\n";
   res += "--------------------------------------end\n";
   return res;
-}
+};
 
-app.route("/mortageAPI/main")
+app.route("/mortgageAPI/main/:property_id")
   .post((req, res) => {
     Join.createAll(req.body.property, req.body.agents, (err, docs) => {
 
     });
   })
   .get((req, res) => {
-    Join.readAll(req.body.property_id, (err, docs) => {
-
+    Join.readAll(req.params.property_id, (err, docs) => {
+      if (err) {
+        res.status(500).send(errorMessage("get", err, docs));
+      } else {
+        res.status(200).json(docs);
+      }
     })
   });
 

@@ -7,7 +7,7 @@ module.exports.createAll = async(property, agents, callback) => {
   let doc;
   try {
     // Create each of the new agents + associate them
-    agents.forEach(agent => {
+    agents.forEach(async function(agent) {
       doc = new Agent(agent);
       doc.properties.push(property.property_id);
       if (!property.agents.includes(doc.agent_id)) {
@@ -27,17 +27,27 @@ module.exports.createAll = async(property, agents, callback) => {
   }
 };
 
+async function readAgentsFromArray(agent_ids) {
+
+};
+
 module.exports.readAll = async (property_id, callback) => {
   let property;
-  let agents;
+  let agents = [];
   let err = null;
   try {
-    property = await Property.read(property_id);
+    property = await Property.findOne({property_id});
     if (property.agents.length) {
-      property.agents.forEach(agent_id => {
-        agent = await Agent.findOne({"agent_id": agent_id});
-        agents.push(agent);
-      });
+      agents = await Promise.all(property.agents.map(async (agent_id) => {
+        return await Agent.findOne({agent_id});
+      }));
+
+      // console.log(">>>>CONSTRUCTING AGENTS ARRAY<<<<<");
+      // property.agents.forEach(async function(agent_id) {
+      //   agent = await Agent.findOne({agent_id});
+      //   agents.push(agent);
+      //   console.log(">>>>>>>AGENTS<<<<<<\n", agents);
+      // });
     }
   } catch(e) {
     err = e;
@@ -45,10 +55,11 @@ module.exports.readAll = async (property_id, callback) => {
     if (err) {
       callback(err, null);
     } else {
-      callback(null, {
+      let res = {
         "property": property,
         "agents": agents
-      });
+      };
+      callback(null, res);
     }
   }
 };
