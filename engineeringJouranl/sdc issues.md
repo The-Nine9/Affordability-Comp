@@ -228,7 +228,22 @@ Result
       return await Agent.findOne({agent_id});
     }));
 
-
+##Issue
+	While importing agents.json (~15GB) to MongoDB on EC-2, the mongoimport tool has been stuck at 46.2% for over 10 minutes. 
+###Theory
+	a) just be patient --> it's been long enough.
+	b) decrease batch size
+	c) numinsertionworkers
+	StackOverFlow @ 
+		stackoverflow.com/questions/33315243/mongoimport-stuck-at-same-point-while-importing-a-json-file
+	d) my file system is full? Can't save a .sh file with vim. Currently using 29.9/30GB!
+	agents.json is about 15GB, if it could delete itself as it loads into mongo, maybe that would fix this?
+###A&R
+	Spend $$$ to fix the problem quickly!
+	AWS Docs "How do I expand the Amazon EBS root volume of my Amazon EC2 Linux instance?"@
+		https://aws.amazon.com/premiumsupport/knowledge-center/expand-root-ebs-linux/
+	[ X ] Request Modification to my EBS volume @
+		https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/requesting-ebs-volume-modifications.html
 
 
 

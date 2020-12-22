@@ -47,7 +47,7 @@
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 	[ X ] Choose one db to move forward with
 	[   ] Stress test in development env. and report metrics from New Relic dashboard
-	[   ] Deploy to AWS
+	[	] Deploy to AWS
 	[   ] Stress test deployed service and report metrics from New Relic dashboard
 	[   ] Attempt to scale to 10k rps
 
@@ -99,7 +99,7 @@
 				[ X ] Alter the tables with index for BFS search
 				[ X ] Verify that all queries run in under 50ms
 
-	[ * ] Choose one db to move forward with
+	[ X ] Choose one db to move forward with
 	  	[ X ] SDC DB Choice Template
 	  		[ X ] Consistency vs. Availability
 	  		[ X ] Read speed
@@ -110,14 +110,16 @@
 
 	[ X ] Midpoint Conversation Video
 
-	[   ] Build out routes
-		[   ] GET
-		[   ] POST
+	[ X ] Build out routes
+		[ X ] GET
+		[ X ] POST
 
-### Rob
-
-	[   ] Seed Mongo on EC-2
-		[   ] Check importing tar directly
+	[ X ] Seed Mongo on EC-2
+		[ X ] scp transfer data to ec2
+		[ X ] Import properties.json
+		[ X ] Decompress agents.tar.gz
+		[ X ] Import agents.json
+	[   ] MongoDB and Express running on seperate servers
 	[   ] Service running on EC-2
 	[   ] K6 + New Relic for Local Stress Testing
 		[   ] Install k6 // runs stress test
@@ -132,12 +134,12 @@
   [   ] Find Bottleneck
   	[   ] It's *probably* Node.js ---> go NGINX create mutliple Node EC-2 Instances
 
-Passing // By end of day tomorrow...!
-  [   ] Fully Deployed + Stress Test
-Excel // By end of week
-  [   ] Well Optimized
-RockStar
-  [   ] 
+
+## Grading
+	Passing
+	  [   ] Fully Deployed + Stress Test
+	Excel
+	  [   ] Optimized
 
 
 
