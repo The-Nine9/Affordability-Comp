@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const PORT = 8020;
 
+require('newrelic');
+
 app.use(express.json());
 
 const Agent = require("../DataBase/mongo/controllers/agent.js");

@@ -27,7 +27,7 @@
 	[ X ] Midpoint Conversation Video
 
 ##Part 3c
-	[   ]	Show the New Relic dashboard displaying your service's metrics during a stress test (in development)
+	[ X ]	Show the New Relic dashboard displaying your service's metrics during a stress test (in development)
 	[   ]	Service RPS (in development) with setup/config details and sample results
 
 ##Part 4
@@ -46,8 +46,8 @@
 	[ X ] Generate 10m records and efficiently load into each database (db)
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 	[ X ] Choose one db to move forward with
-	[   ] Stress test in development env. and report metrics from New Relic dashboard
-	[	] Deploy to AWS
+	[ * ] Stress test in development env. and report metrics from New Relic dashboard
+	[	  ] Deploy to AWS
 	[   ] Stress test deployed service and report metrics from New Relic dashboard
 	[   ] Attempt to scale to 10k rps
 
@@ -81,15 +81,15 @@
 		[ X ] Use .json files to seed mongo
 			[ X ] Seeded small amounts of data
 			[ X ] Seed the full 2x 10M dataset
-			[ ? ] Refactor the data's absolute path names to relative path names
+			[ X ] Refactor the data's absolute path names to relative path names
 
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 		[ X ] Write all queries used by the API for mongo + postgres
 			[ X ] Test mongo queries on cli
 				[ X ] exectue GET
 				[ X ] analyze GET
-				[...] execute POST
-				[...] analyze POST
+				[ X ] execute POST
+				[ X ] analyze POST
 			[ X ] Test psql queries on cli
 				[ X ] exectue GET
 				[ X ] analyze GET
@@ -119,12 +119,18 @@
 		[ X ] Import properties.json
 		[ X ] Decompress agents.tar.gz
 		[ X ] Import agents.json
-	[   ] MongoDB and Express running on seperate servers
-	[   ] Service running on EC-2
-	[   ] K6 + New Relic for Local Stress Testing
-		[   ] Install k6 // runs stress test
-		[   ] Install New Relic // provides data
-		[   ] Stress test GET on k6
+	[ X ] Service running on EC-2
+		[ X ] MongoDB and Express running on seperate servers
+	[ * ] K6 + New Relic for Local Stress Testing
+		[ X ] Begin using New Relic
+			[ X ] Get liscence Key
+			[ X ] Install web agent
+			[ X ] See data
+		[ * ] Stress Test with K6
+			[ X ] Install K6
+			[ X ] Test GET route with K6
+			[ * ] Improve performance of GET route
+
 	[   ] Deploy to EC-2
 	  [   ] Change mongo conf to allow connections?
 	  [   ] Goto the IPV4 service url and interact w/ my serivce
@@ -133,7 +139,6 @@
 		[   ] Stress test online performance
   [   ] Find Bottleneck
   	[   ] It's *probably* Node.js ---> go NGINX create mutliple Node EC-2 Instances
-
 
 ## Grading
 	Passing
