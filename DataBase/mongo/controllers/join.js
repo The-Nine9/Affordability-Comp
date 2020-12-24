@@ -1,26 +1,28 @@
 const mongoose = require("mongoose");
-
+const mongo = require("mongodb");
 const { Agent, Property } = require("../schema.mongo.js");
 
 module.exports.createAll = async(property, agents, callback) => {
   let err = null;
   let doc;
   try {
-    // aquire property_id
-    // check property for any existing agents:
-    //  go thru the db and update those agents with property_id
-    // for every new agent in the $agents paramater:
-    //  aquire agent_id
-    //  add the new agent_id to the agents array in $property paramater
-    //  create a new agent doc
-    //  accumulate the new doc to an array
-    // save() the new agents array to the db
+  /**
+    * aquire property_id
+    * check property for any existing agents:
+    *  go thru the db and update those agents with property_id
+    * for every new agent in the $agents paramater:
+    *  aquire agent_id
+    *  add the new agent_id to the agents array in $property paramater
+    *  create a new agent doc
+    *  accumulate the new doc to an array
+    * save() the new agents array to the db
+    */
     doc = await Property.find({}).sort({property_id: -1}).limit(1);
     property.property_id = doc[0].property_id + 1;
-    console.log(">>>property.property_id:\n",property.property_id);
-    console.log(">>>property.agents:\n",property.agents);
+    // console.log(">>>property.property_id:\n",property.property_id);
+    // console.log(">>>property.agents:\n",property.agents);
     if (property.agents.length) {
-      console.log(">>>about to update...\n");
+      // console.log(">>>about to update...\n");
       await Agent.updateMany(
         { agent_id: { $in: property.agents } }, // filter
         { $addToSet: { properties: property.property_id } } // doc
