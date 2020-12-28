@@ -27,7 +27,7 @@
 	[ X ] Midpoint Conversation Video
 
 ##Part 3c
-	[   ]	Show the New Relic dashboard displaying your service's metrics during a stress test (in development)
+	[ X ]	Show the New Relic dashboard displaying your service's metrics during a stress test (in development)
 	[   ]	Service RPS (in development) with setup/config details and sample results
 
 ##Part 4
@@ -46,8 +46,8 @@
 	[ X ] Generate 10m records and efficiently load into each database (db)
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 	[ X ] Choose one db to move forward with
-	[   ] Stress test in development env. and report metrics from New Relic dashboard
-	[	] Deploy to AWS
+	[ X ] Stress test in development env. and report metrics from New Relic dashboard
+	[ * ] Deploy to AWS
 	[   ] Stress test deployed service and report metrics from New Relic dashboard
 	[   ] Attempt to scale to 10k rps
 
@@ -88,13 +88,13 @@
 			[ X ] Test mongo queries on cli
 				[ X ] exectue GET
 				[ X ] analyze GET
-				[...] execute POST
-				[...] analyze POST
+				[ X ] execute POST
+				[ X ] analyze POST
 			[ X ] Test psql queries on cli
 				[ X ] exectue GET
 				[ X ] analyze GET
-				[...] execute POST
-				[...] analyze POST
+				[ X ] execute POST
+				[ X ] analyze POST
 		[ X ] Measure query times
 				[ X ] Alter the tables with index for BFS search
 				[ X ] Verify that all queries run in under 50ms
@@ -106,7 +106,7 @@
 	  		[ X ] DB size in memory
 	  			[ X ] Mongo: db.runCommand({dbStats: 1, scale: 1000000000});
 	  			[ X ] PSQL: SELECT pg_size_pretty( pg_database_size('mortgage') );
-		  	[   ] Implement server endpoints to query that db
+		  	[ X ] Implement server endpoints to query that db
 
 	[ X ] Midpoint Conversation Video
 
@@ -119,15 +119,15 @@
 		[ X ] Import properties.json
 		[ X ] Decompress agents.tar.gz
 		[ X ] Import agents.json
-	[   ] MongoDB and Express running on seperate servers
-	[   ] Service running on EC-2
-	[   ] K6 + New Relic for Local Stress Testing
-		[   ] Install k6 // runs stress test
-		[   ] Install New Relic // provides data
-		[   ] Stress test GET on k6
-	[   ] Deploy to EC-2
-	  [   ] Change mongo conf to allow connections?
-	  [   ] Goto the IPV4 service url and interact w/ my serivce
+	[ X ] MongoDB and Express running on seperate servers
+	[ X ] Service running on EC-2
+	[ X ] K6 + New Relic for Local Stress Testing
+		[ X ] Install k6 // runs stress test
+		[ X ] Install New Relic // provides data
+		[ X ] Stress test GET on k6
+	[ * ] Deploy to EC-2
+	  [ X ] Goto the IPV4 service url and interact w/ my serivce
+	  [ * ] Load balance with NGINX
 	[   ] Loader.IO
 		[   ] Install Loader.IO
 		[   ] Stress test online performance
