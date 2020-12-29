@@ -252,8 +252,12 @@ Result
 
 
 
-
-
+##Issue
+	Running K6 to the localhost:8020, the request fails.
+###Theory
+	I need to find the right url to reference the localhost.
+###A&R
+	Changed the https url to an http url.
 
 
 

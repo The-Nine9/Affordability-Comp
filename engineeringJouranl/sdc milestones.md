@@ -46,6 +46,7 @@
 	[ X ] Generate 10m records and efficiently load into each database (db)
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 	[ X ] Choose one db to move forward with
+TERMINUS_APOCALYPTICO
 	[ X ] Stress test in development env. and report metrics from New Relic dashboard
 	[ * ] Deploy to AWS
 	[   ] Stress test deployed service and report metrics from New Relic dashboard
@@ -81,7 +82,7 @@
 		[ X ] Use .json files to seed mongo
 			[ X ] Seeded small amounts of data
 			[ X ] Seed the full 2x 10M dataset
-			[ ? ] Refactor the data's absolute path names to relative path names
+			[ X ] Refactor the data's absolute path names to relative path names
 
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 		[ X ] Write all queries used by the API for mongo + postgres
@@ -136,7 +137,6 @@
 		[   ] Stress test online performance
   [   ] Find Bottleneck
   	[   ] It's *probably* Node.js ---> go NGINX create mutliple Node EC-2 Instances
-
 
 ## Grading
 	Passing
