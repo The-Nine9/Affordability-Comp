@@ -9,18 +9,16 @@ module.exports.createAll = async(property, agents, callback) => {
     // aquire property_id
     // check property for any existing agents:
     //  go thru the db and update those agents with property_id
-    // for every new agent in the $agents paramater:
-    //  aquire agent_id
-    //  add the new agent_id to the agents array in $property paramater
-    //  create a new agent doc
-    //  accumulate the new doc to an array
-    // save() the new agents array to the db
+    // if the agents paramater contains new agents to create:
+    //  get the last agent_id in the agents collection
+    //  iterate thru the agents paramater array, and add agent_id numbers to each
+    //  save all the new agents
     doc = await Property.find({}).sort({property_id: -1}).limit(1);
     property.property_id = doc[0].property_id + 1;
     if (property.agents.length) {
       await Agent.updateMany(
-        { agent_id: { $in: property.agents } }, // filter
-        { $addToSet: { properties: property.property_id } } // doc
+        { agent_id: { $in: property.agents } },
+        { $addToSet: { properties: property.property_id } }
       );
     }
     if (agents.length) {
@@ -29,6 +27,7 @@ module.exports.createAll = async(property, agents, callback) => {
       agents.forEach(agent => {
         agent_id++;
         agent.agent_id = agent_id;
+        agent.properties.push(property.property_id);
       })
       await Agent.insertMany(agents);
     }

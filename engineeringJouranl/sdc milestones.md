@@ -128,6 +128,9 @@
 	[ * ] Deploy to EC-2
 	  [ X ] Goto the IPV4 service url and interact w/ my serivce
 	  [ * ] Load balance with NGINX
+	  	[ X ] Install nginx on mac os
+	  	[   ] nginx load balancing on mac os
+	  	[   ] nginx load balancing on a new ec-2 instance
 	[   ] Loader.IO
 		[   ] Install Loader.IO
 		[   ] Stress test online performance
