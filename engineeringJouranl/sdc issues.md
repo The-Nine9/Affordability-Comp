@@ -245,6 +245,12 @@ Result
 	[ X ] Request Modification to my EBS volume @
 		https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/requesting-ebs-volume-modifications.html
 
+##Issue
+	While trying to start nodemon on an ec-2 instance, recieved an "address already in use" error.
+###A&R
+	Read stackoverflow ---> killed the process on the conflicted port, and nodemon started then.
+
+
 
 ##Issue
 	Running K6 to the localhost:8020, the request fails.

@@ -46,8 +46,9 @@
 	[ X ] Generate 10m records and efficiently load into each database (db)
 	[ X ] Performance tune and benchmark test the queries for 2 db options 
 	[ X ] Choose one db to move forward with
-	[ * ] Stress test in development env. and report metrics from New Relic dashboard
-	[	  ] Deploy to AWS
+TERMINUS_APOCALYPTICO
+	[ X ] Stress test in development env. and report metrics from New Relic dashboard
+	[ * ] Deploy to AWS
 	[   ] Stress test deployed service and report metrics from New Relic dashboard
 	[   ] Attempt to scale to 10k rps
 
@@ -93,8 +94,8 @@
 			[ X ] Test psql queries on cli
 				[ X ] exectue GET
 				[ X ] analyze GET
-				[...] execute POST
-				[...] analyze POST
+				[ X ] execute POST
+				[ X ] analyze POST
 		[ X ] Measure query times
 				[ X ] Alter the tables with index for BFS search
 				[ X ] Verify that all queries run in under 50ms
@@ -106,7 +107,7 @@
 	  		[ X ] DB size in memory
 	  			[ X ] Mongo: db.runCommand({dbStats: 1, scale: 1000000000});
 	  			[ X ] PSQL: SELECT pg_size_pretty( pg_database_size('mortgage') );
-		  	[   ] Implement server endpoints to query that db
+		  	[ X ] Implement server endpoints to query that db
 
 	[ X ] Midpoint Conversation Video
 
@@ -119,21 +120,18 @@
 		[ X ] Import properties.json
 		[ X ] Decompress agents.tar.gz
 		[ X ] Import agents.json
+	[ X ] MongoDB and Express running on seperate servers
 	[ X ] Service running on EC-2
-		[ X ] MongoDB and Express running on seperate servers
-	[ * ] K6 + New Relic for Local Stress Testing
-		[ X ] Begin using New Relic
-			[ X ] Get liscence Key
-			[ X ] Install web agent
-			[ X ] See data
-		[ * ] Stress Test with K6
-			[ X ] Install K6
-			[ X ] Test GET route with K6
-			[ * ] Improve performance of GET route
-
-	[   ] Deploy to EC-2
-	  [   ] Change mongo conf to allow connections?
-	  [   ] Goto the IPV4 service url and interact w/ my serivce
+	[ X ] K6 + New Relic for Local Stress Testing
+		[ X ] Install k6 // runs stress test
+		[ X ] Install New Relic // provides data
+		[ X ] Stress test GET on k6
+	[ * ] Deploy to EC-2
+	  [ X ] Goto the IPV4 service url and interact w/ my serivce
+	  [ * ] Load balance with NGINX
+	  	[ X ] Install nginx on mac os
+	  	[   ] nginx load balancing on mac os
+	  	[   ] nginx load balancing on a new ec-2 instance
 	[   ] Loader.IO
 		[   ] Install Loader.IO
 		[   ] Stress test online performance

@@ -6,3 +6,5 @@ DataBase/mongo/data
 
 aws/SDC.pem
 aws/login.sh
+
+newrelic_agent.log

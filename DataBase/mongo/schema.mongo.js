@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-// mongoose.connect("mongodb://localhost/mortgage");
-mongoose.connect("mongodb://13.52.255.245/mortgage");
+mongoose.connect("mongodb://localhost/mortgage");
+// mongoose.connect("mongodb://13.52.255.245/mortgage");
 const db = mongoose.connection;
 
 const Property = mongoose.model("Property", new mongoose.Schema({
