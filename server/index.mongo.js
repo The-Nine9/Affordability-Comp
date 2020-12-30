@@ -171,8 +171,8 @@ app.route("/mortgageAPI/agent/:id")
     })
   });
 
-//legacy
 app.use('/mortgage/:id', express.static('client/dist'));
+app.use(express.static('client/dist'));
 // app.get('*/:id/db', mongoCont.get);
 app.listen(PORT, () => {
   console.log(`Listening on 127.0.0.1:${PORT}`);
